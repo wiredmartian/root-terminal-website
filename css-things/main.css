@@ -36,7 +36,8 @@ body {
   position: absolute;
   z-index: 9; }
   .container #terminal-window .terminal-content {
-    font-size: 16px; }
+    font-size: 20px;
+    padding-top: 15px; }
     .container #terminal-window .terminal-content .line {
       position: relative;
       min-height: 15px;
@@ -52,7 +53,7 @@ body {
         border: none;
         color: white;
         width: 72%;
-        font-size: 16px; }
+        font-size: 18px; }
     .container #terminal-window .terminal-content .prefix {
       color: #008c23;
       font-weight: bolder; }
@@ -77,5 +78,21 @@ body {
   display: block;
   content: "";
   clear: both; }
+
+.hacker-color, b {
+  color: #008c23; }
+
+.main-title {
+  font-size: 50px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  margin: 40px auto; }
+
+.text-center {
+  text-align: center; }
+
+#typewriter {
+  font-size: 20px;
+  line-height: 10px; }
 
 /*# sourceMappingURL=main.css.map */

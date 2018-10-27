@@ -46,7 +46,8 @@ body {
     z-index: 9;
 
     .terminal-content {
-      font-size: 16px;
+      font-size: 20px;
+      padding-top: 15px;
       .line {
         position: relative;
         min-height: 15px;
@@ -63,7 +64,7 @@ body {
           border: none;
           color: white;
           width: 72%;
-          font-size: 16px;
+          font-size: 18px;
         }
       }
 
@@ -99,5 +100,19 @@ body {
   content: "";
   clear: both;
 }
-
-
+.hacker-color, b {
+  color: #008c23;
+}
+.main-title {
+  font-size: 50px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  margin: 40px auto;
+}
+.text-center {
+  text-align: center;
+}
+#typewriter {
+  font-size: 20px;
+  line-height: 10px;
+}
