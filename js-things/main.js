@@ -1,5 +1,7 @@
+// import brain from './brain';
+
 dragElement(document.getElementById("terminal-window"));
-// language=HTML
+
 let bio = [
     "Oh, hello there^500, Welcome!^1000",
     "I am the wiredmartian, a <b>software developer</b> based in Durban, South Africa.\n^500" +
@@ -11,7 +13,7 @@ let bio = [
     "<strong>$ wm realname</strong><br>" +
     "<strong>$ wm education</strong><br>" +
     "<strong>$ wm contacts</strong><br>"  +
-    "<strong>$ wm <strike>rel-status</strike> <b>deprecated</b </strong><br>" ];
+    "<strong>$ wm <strike>rel-status</strike> (deprecated) </strong><br>" ];
 
 function dragElement(elmnt) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
