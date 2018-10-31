@@ -1,24 +1,34 @@
-class Terminal {
 
-    constructor (HTMLElementId, Options) {
+const Terminal = (function () {
+    const Terminal = function (HTMLElementId, Options) {
         this.element = HTMLElementId;
-        this.defaults();
-        this.getOptions(Options);
-    }
+        _defaults();
+        _getOptions(Options);
+    };
 
-    defaults() {
-        let self = this;
-
+    function _defaults() {
         /** HTML Element Selector */
-        if (typeof self.element === "string") {
-            let _htmlElement = document.querySelector(self.element);
+        if (typeof this.element === "string") {
+            let _htmlElement = document.querySelector(this.element);
+            console.log(_htmlElement);
             if (typeof _htmlElement !== "undefined") {
-                self.element = _htmlElement;
+                Terminal.element = _htmlElement;
+
+                /** attach listener on Enter */
+                Terminal.element.addEventListener("keydown", function (e) {
+                    handleUserInput(e)
+                });
             }
+        }
+
+    }
+    function handleUserInput(e) {
+        if (e.key === "Enter" && e.keyCode === 13) {
+            console.log('Do something awesome');
         }
     }
 
-    getOptions(opts) {
+    function _getOptions(opts) {
         let self = this;
 
         let options = new Object({
@@ -32,7 +42,7 @@ class Terminal {
         console.log(self.options)
     }
 
-    getTerminalCommands() {
+    function _getTerminalCommands() {
         let data = (window.commands.length > 0) ? window.commands : [];
         let cmd = [];
         data.forEach((value) => {
@@ -40,8 +50,8 @@ class Terminal {
         });
         return cmd;
     }
-    proccessTerminalInput(input = "dob") {
-        let arr = this.getTerminalCommands();
+    function _proccessTerminalInput(input = "dob") {
+        let arr = _getTerminalCommands();
         if (arr.length !== 0 && typeof(input) !== undefined) {
             arr.forEach((value, index) => {
                 if (value[0].toString().includes(input)) {
@@ -51,47 +61,7 @@ class Terminal {
             })
         }
     }
-}
 
-/** (function(el = HTMLElementId, ops = Options) {
-    let element = el;
-    let options = Object.create({
-        color: 'green'
-    });
-    let defaults = () => {
-        if (typeof element === "string") {
-            let _htmlElement = document.querySelector(element);
-            if (typeof _htmlElement !== "undefined") {
-                element = _htmlElement;
-            }
-        }
-    };
-    defaults();
+    return Terminal;
+})();
 
-    let data = (brain.length > 0) ? brain : [];
-    let commands = () => {
-        let cmd = [];
-        data.forEach((value) => {
-            cmd.push(Array.from(Object.keys(value)));
-        });
-        return cmd;
-    };
-    let usercommand = (input) => {
-        let arr = commands();
-        if (arr.length !== 0 && typeof(input) !== undefined) {
-            arr.forEach((value, index) => {
-                if (value[0].toString().includes(input)) {
-                    let res = Object.values(data[index])[0];
-                    console.log(res);
-                }
-            })
-        }
-    };
-    return {
-        commands: commands(),
-        input:  (input) => {
-            return usercommand(input);
-        },
-        HTMLElement: element
-    }
-})(); */
