@@ -1,4 +1,4 @@
-const brain = [
+window.commands = [
     { realname: "My real name is Solomzi Jikani"},
     { dob: "I was born in September 29, 1994"},
     { education: "I was born in September 29, 1994"},
