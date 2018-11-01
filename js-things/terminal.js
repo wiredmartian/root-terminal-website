@@ -115,7 +115,11 @@ const Terminal = (function () {
         }
         return result;
     }
-    Terminal("#commandInput", {root: "root@user", bg_color: "red"});
+    Terminal("#commandInput", {root: "root@user:~#", bg_color: "red", 
+    commands: [
+        { education: "Durban University of Technology" },
+        { proffession: "JavaScript developer"}
+    ]});
     return Terminal;
 })();
 
