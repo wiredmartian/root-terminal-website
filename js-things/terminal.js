@@ -18,16 +18,14 @@ const Terminal = (function () {
                 if (isInput === "input") {
                     Terminal.element = _htmlElement;
                     /** attach listener on Enter */
-                    Terminal.element.addEventListener("keydown", function (e) {
-                        handleUserInput(e)
-                    });
+                    Terminal.element.addEventListener("keydown", handleUserInput);
                 }
             }
         }
 
     }
     function handleUserInput(e) {
-        if (e.key === "Enter" && e.keyCode === 13) {
+        if (e.key === "Enter" && e.keyCode === 13 && e.isTrusted) {
             let input = Terminal.element.value;
 
             if (typeof input !== "undefined" && input !== "") {
@@ -58,13 +56,19 @@ const Terminal = (function () {
             new_input.autofocus = true;
         }
         last_el.after(new_node);
-        killElementAfterCloning(last_el);
+        _killElementAfterCloning(last_el);
     }
 
-    function killElementAfterCloning(el) {
-        let old_el = el.querySelector('input');
-        old_el.id = "";
-        old_el.disabled = true;
+    function _killElementAfterCloning(el) {
+        let old_el = el.querySelector('input.commandInput');
+        if (old_el) {
+            /** detach event listener */
+            console.log("kil():");
+            old_el.removeEventListener("keydown", handleUserInput, false);
+            old_el.removeAttribute("id");
+            old_el.removeAttribute("name");
+            old_el.disabled = true;
+        }
     }
 
     function _getOptions(opts) {
