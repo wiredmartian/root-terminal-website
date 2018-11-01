@@ -41,7 +41,7 @@ body {
     .container #terminal-window .terminal-content .line {
       position: relative;
       min-height: 15px;
-      /* white-space: pre-wrap; */ }
+      margin: 15px auto; }
       .container #terminal-window .terminal-content .line input {
         /*position: absolute;*/
         top: 0;

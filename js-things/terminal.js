@@ -2,6 +2,7 @@
 const Terminal = (function () {
     const Terminal = function (HTMLElementId, Options) {
         this.element = HTMLElementId;
+        this.options = {};
         _defaults();
         _getOptions(Options);
     };
@@ -30,14 +31,43 @@ const Terminal = (function () {
             let input = Terminal.element.value;
 
             if (typeof input !== "undefined" && input !== "") {
-                _processTerminalInput(input);
+                let response = _processTerminalInput(input);
+                createNewLine(response);
             }
         }
     }
+    
+    function createHTMLElement() {
+        let newelement = document.createElement("span");
+        let node = `<span class=\"prefix\"> ${Terminal.options.root} </span>`;
+        newelement.textContent = Terminal.options.root;
+        newelement.className = "prefix"
+        createNewLine();
+    }
+
+    function createNewLine(res) {
+        console.log(`createNewLine(): ${res}`);
+        let lines = Array.from(document.querySelectorAll('.line'));
+        let last_el = lines[lines.length - 1];
+        let new_node = last_el.cloneNode(true);
+        let new_input = new_node.querySelector('input.commandInput');
+        if (new_input) {
+            /** TODO: this line is too much dependent on the DOM */
+            new_input.parentElement.firstElementChild.innerText = Terminal.options.root;
+            new_input.value = res;
+            new_input.autofocus = true;
+        }
+        last_el.after(new_node);
+        killElementAfterCloning(last_el);
+    }
+
+    function killElementAfterCloning(el) {
+        let old_el = el.querySelector('input');
+        old_el.id = "";
+        old_el.disabled = true;
+    }
 
     function _getOptions(opts) {
-        let self = this;
-
         let options = new Object({
             root: "root@ubuntu",
             guest: "guest@ubuntu",
@@ -45,8 +75,7 @@ const Terminal = (function () {
             bg_color: "green"
         });
         Object.assign(options, opts);
-        self.options = options;
-        console.log(self.options)
+        Terminal.options = options;
     }
 
     function _getTerminalCommands() {
@@ -59,18 +88,19 @@ const Terminal = (function () {
     }
     function _processTerminalInput(input = "dob") {
         let arr = _getTerminalCommands();
+        let result = "";
         if (arr.length !== 0 && typeof(input) !== undefined) {
-            arr.forEach((value, index) => {
-                if (value[0].toString().includes(input)) {
-                    let res = Object.values(window.commands[index])[0];
-                    console.log(res);
-                } else {
-                    console.log(`\"${ input }\" is not recognized as an internal or external command`);
+            result =`\"${ input }\" is not recognized as an internal or external command`;
+            for (let index in arr) {
+                if (arr[index].toString().includes(input.toLocaleLowerCase())) {
+                    result = Object.values(window.commands[index])[0];
+                    break;
                 }
-            })
+            }
         }
+        return result;
     }
-
+    Terminal(".commandInput", {root: "root@user", bg_color: "red"});
     return Terminal;
 })();
 
