@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb2d4966-0ded-4846-9a5c-31fdeacc7b93" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css-things/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/css-things/main.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css-things/main.css.map" beforeDir="false" afterPath="$PROJECT_DIR$/css-things/main.css.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css-things/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/css-things/main.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/js-things/terminal.js" beforeDir="false" afterPath="$PROJECT_DIR$/js-things/terminal.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -59,8 +55,8 @@
       <file leaf-file-name="terminal.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js-things/terminal.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-857">
-              <caret line="49" column="52" lean-forward="true" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
+            <state relative-caret-position="-932">
+              <caret line="46" column="52" lean-forward="true" selection-start-line="46" selection-start-column="52" selection-end-line="46" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -179,16 +175,15 @@
       <workItem from="1540801433570" duration="7640000" />
       <workItem from="1540899902900" duration="7616000" />
       <workItem from="1540986872750" duration="14026000" />
-      <workItem from="1541066777814" duration="87000" />
+      <workItem from="1541066777814" duration="686000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="64888000" />
+    <option name="totallyTimeSpent" value="65487000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="154" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15015806" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -348,8 +343,8 @@
     <entry file="file://$PROJECT_DIR$/js-things/tsconfig.json" />
     <entry file="file://$PROJECT_DIR$/js-things/terminal.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-857">
-          <caret line="49" column="52" lean-forward="true" selection-start-line="49" selection-start-column="52" selection-end-line="49" selection-end-column="52" />
+        <state relative-caret-position="-932">
+          <caret line="46" column="52" lean-forward="true" selection-start-line="46" selection-start-column="52" selection-end-line="46" selection-end-column="52" />
         </state>
       </provider>
     </entry>

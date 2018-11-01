@@ -1,4 +1,3 @@
-
 const Terminal = (function () {
     const Terminal = function (HTMLElementId, Options) {
         this.element = HTMLElementId;
@@ -11,7 +10,7 @@ const Terminal = (function () {
         /** HTML Element Selector */
         if (typeof this.element === "string") {
             let _htmlElement = document.querySelector(this.element);
-            console.log(_htmlElement);
+            console.log("_defaults():", _htmlElement);
             if (typeof _htmlElement !== "undefined") {
 
                 let isInput = _htmlElement.localName;
@@ -84,14 +83,18 @@ const Terminal = (function () {
             root: "root@ubuntu",
             guest: "guest@ubuntu",
             into: ["Leave as null", "if you don't want bio"],
-            bg_color: "green"
+            bg_color: "green",
+            commands: [
+                { realname: "wiredmartian"},
+                { dob: "September 29, 0001"}
+            ]
         });
         Object.assign(options, opts);
         Terminal.options = options;
     }
 
     function _getTerminalCommands() {
-        let data = (window.commands.length > 0) ? window.commands : [];
+        let data = (Terminal.options.commands.length > 0) ? Terminal.options.commands : [];
         let cmd = [];
         data.forEach((value) => {
             cmd.push(Array.from(Object.keys(value)));
@@ -105,7 +108,7 @@ const Terminal = (function () {
             result =`\"${ input }\" is not recognized as an internal or external command`;
             for (let index in arr) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
-                    result = Object.values(window.commands[index])[0];
+                    result = Object.values(Terminal.options.commands[index])[0];
                     break;
                 }
             }
