@@ -1,4 +1,3 @@
-
 const Terminal = (function () {
     const Terminal = function (HTMLElementId, Options) {
         this.element = HTMLElementId;
@@ -11,7 +10,7 @@ const Terminal = (function () {
         /** HTML Element Selector */
         if (typeof this.element === "string") {
             let _htmlElement = document.querySelector(this.element);
-            console.log(_htmlElement);
+            console.log("_defaults():", _htmlElement);
             if (typeof _htmlElement !== "undefined") {
 
                 let isInput = _htmlElement.localName;
@@ -45,8 +44,7 @@ const Terminal = (function () {
 
     function createNewLine(res) {
         console.log(`createNewLine(): ${res}`);
-        let lines = Array.from(document.querySelectorAll('.line'));
-        let last_el = lines[lines.length - 1];
+        let last_el = _getLastLineElement();
         let new_node = last_el.cloneNode(true);
         let new_input = new_node.querySelector('input#commandInput');
         if (new_input) {
@@ -55,13 +53,33 @@ const Terminal = (function () {
             new_input.value = res;
             new_input.autofocus = true;
         }
-        Terminal.element = new_input;
         last_el.after(new_node)
-        _killElementAfterCloning(last_el)
-        _attachEventToNewInputElement(new_input)
+        
+        _killElementAfterCloning(last_el, function(){
+            console.log('confirm kill():')
+            let _last_line = _getLastLineElement();
+            console.log(_last_line, "lastLIne")
+            let _new_node = _last_line.cloneNode(true);
+            let _new_input = _new_node.querySelector('input#commandInput');
+            if (_new_input) {
+                _new_input.parentElement.firstElementChild.innerText = Terminal.options.guest;
+                _new_input.value = "";
+                _new_input.autofocus = true;
+                _last_line.after(_new_node);
+                _killElementAfterCloning(_last_line, null);
+            }
+            Terminal.element = _new_input;
+            _attachEventToNewInputElement(_new_input)
+        })
+        
     }
 
-    function _killElementAfterCloning(el) {
+    function _getLastLineElement() {
+        let lines = Array.from(document.querySelectorAll('.line'));
+        return lines[lines.length - 1];
+    }
+
+    function _killElementAfterCloning(el, cb) {
         let old_el = el.querySelector('input#commandInput');
         if (old_el) {
             /** detach event listener */
@@ -71,6 +89,7 @@ const Terminal = (function () {
             old_el.removeAttribute("name");
             old_el.disabled = true;
         }
+        if (cb) { cb(); }
     }
     function _detachEventOnElement(el) {
         el.removeEventListener("keydown", handleUserInput, false);
@@ -81,17 +100,21 @@ const Terminal = (function () {
 
     function _getOptions(opts) {
         let options = new Object({
-            root: "root@ubuntu",
-            guest: "guest@ubuntu",
+            root: "root@martian:~#",
+            guest: "guest@martian:~#",
             into: ["Leave as null", "if you don't want bio"],
-            bg_color: "green"
+            bg_color: "green",
+            commands: [
+                { realname: "wiredmartian"},
+                { dob: "September 29, 0001"}
+            ]
         });
         Object.assign(options, opts);
         Terminal.options = options;
     }
 
     function _getTerminalCommands() {
-        let data = (window.commands.length > 0) ? window.commands : [];
+        let data = (Terminal.options.commands.length > 0) ? Terminal.options.commands : [];
         let cmd = [];
         data.forEach((value) => {
             cmd.push(Array.from(Object.keys(value)));
@@ -105,14 +128,18 @@ const Terminal = (function () {
             result =`\"${ input }\" is not recognized as an internal or external command`;
             for (let index in arr) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
-                    result = Object.values(window.commands[index])[0];
+                    result = Object.values(Terminal.options.commands[index])[0];
                     break;
                 }
             }
         }
         return result;
     }
-    Terminal("#commandInput", {root: "root@user", bg_color: "red"});
+    Terminal("#commandInput", {root: "root@user:~#", bg_color: "red", 
+    commands: [
+        { education: "Durban University of Technology" },
+        { proffession: "JavaScript developer"}
+    ]});
     return Terminal;
 })();
 
