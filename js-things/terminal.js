@@ -12,19 +12,26 @@ const Terminal = (function () {
             let _htmlElement = document.querySelector(this.element);
             console.log(_htmlElement);
             if (typeof _htmlElement !== "undefined") {
-                Terminal.element = _htmlElement;
 
-                /** attach listener on Enter */
-                Terminal.element.addEventListener("keydown", function (e) {
-                    handleUserInput(e)
-                });
+                let isInput = _htmlElement.localName;
+                if (isInput === "input") {
+                    Terminal.element = _htmlElement;
+                    /** attach listener on Enter */
+                    Terminal.element.addEventListener("keydown", function (e) {
+                        handleUserInput(e)
+                    });
+                }
             }
         }
 
     }
     function handleUserInput(e) {
         if (e.key === "Enter" && e.keyCode === 13) {
-            console.log('Do something awesome');
+            let input = Terminal.element.value;
+
+            if (typeof input !== "undefined" && input !== "") {
+                _processTerminalInput(input);
+            }
         }
     }
 
@@ -50,13 +57,15 @@ const Terminal = (function () {
         });
         return cmd;
     }
-    function _proccessTerminalInput(input = "dob") {
+    function _processTerminalInput(input = "dob") {
         let arr = _getTerminalCommands();
         if (arr.length !== 0 && typeof(input) !== undefined) {
             arr.forEach((value, index) => {
                 if (value[0].toString().includes(input)) {
                     let res = Object.values(window.commands[index])[0];
                     console.log(res);
+                } else {
+                    console.log(`\"${ input }\" is not recognized as an internal or external command`);
                 }
             })
         }
