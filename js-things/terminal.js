@@ -48,27 +48,35 @@ const Terminal = (function () {
         let lines = Array.from(document.querySelectorAll('.line'));
         let last_el = lines[lines.length - 1];
         let new_node = last_el.cloneNode(true);
-        let new_input = new_node.querySelector('input.commandInput');
+        let new_input = new_node.querySelector('input#commandInput');
         if (new_input) {
             /** TODO: this line is too much dependent on the DOM */
             new_input.parentElement.firstElementChild.innerText = Terminal.options.root;
             new_input.value = res;
             new_input.autofocus = true;
         }
-        last_el.after(new_node);
-        _killElementAfterCloning(last_el);
+        Terminal.element = new_input;
+        last_el.after(new_node)
+        _killElementAfterCloning(last_el)
+        _attachEventToNewInputElement(new_input)
     }
 
     function _killElementAfterCloning(el) {
-        let old_el = el.querySelector('input.commandInput');
+        let old_el = el.querySelector('input#commandInput');
         if (old_el) {
             /** detach event listener */
             console.log("kil():");
-            old_el.removeEventListener("keydown", handleUserInput, false);
+            _detachEventOnElement(old_el);
             old_el.removeAttribute("id");
             old_el.removeAttribute("name");
             old_el.disabled = true;
         }
+    }
+    function _detachEventOnElement(el) {
+        el.removeEventListener("keydown", handleUserInput, false);
+    }
+    function _attachEventToNewInputElement(el) {
+        el.addEventListener("keydown", handleUserInput);
     }
 
     function _getOptions(opts) {
@@ -104,7 +112,7 @@ const Terminal = (function () {
         }
         return result;
     }
-    Terminal(".commandInput", {root: "root@user", bg_color: "red"});
+    Terminal("#commandInput", {root: "root@user", bg_color: "red"});
     return Terminal;
 })();
 
