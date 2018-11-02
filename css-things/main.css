@@ -57,6 +57,8 @@ body {
     .container #terminal-window .terminal-content .prefix {
       color: #008c23;
       font-weight: bolder; }
+    .container #terminal-window .terminal-content .prefix-root {
+      color: #cfcd00 !important; }
     .container #terminal-window .terminal-content .prefix::after {
       content: ' '; }
     .container #terminal-window .terminal-content .cursor {

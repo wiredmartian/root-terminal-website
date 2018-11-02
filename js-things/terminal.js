@@ -17,13 +17,13 @@ const Terminal = (function () {
                 if (isInput === "input") {
                     Terminal.element = _htmlElement;
                     /** attach listener on Enter */
-                    Terminal.element.addEventListener("keydown", handleUserInput);
+                    Terminal.element.addEventListener("keydown", _handleUserInput);
                 }
             }
         }
 
     }
-    function handleUserInput(e) {
+    function _handleUserInput(e) {
         if (e.key === "Enter" && e.keyCode === 13 && e.isTrusted) {
             let input = Terminal.element.value;
 
@@ -38,31 +38,34 @@ const Terminal = (function () {
         let newelement = document.createElement("span");
         let node = `<span class=\"prefix\"> ${Terminal.options.root} </span>`;
         newelement.textContent = Terminal.options.root;
-        newelement.className = "prefix"
+        newelement.className = "prefix";
         createNewLine();
     }
 
     function createNewLine(res) {
-        console.log(`createNewLine(): ${res}`);
         let last_el = _getLastLineElement();
         let new_node = last_el.cloneNode(true);
         let new_input = new_node.querySelector('input#commandInput');
         if (new_input) {
             /** TODO: this line is too much dependent on the DOM */
             new_input.parentElement.firstElementChild.innerText = Terminal.options.root;
+            new_input.parentElement.firstElementChild.classList.add('prefix-root');
             new_input.value = res;
+            let el = document.createElement('span');
+            el.innerHTML = res;
+            console.log(el, "html element():");
             new_input.autofocus = true;
         }
-        last_el.after(new_node)
+        last_el.after(new_node);
         
         _killElementAfterCloning(last_el, function(){
-            console.log('confirm kill():')
+            console.log('confirm kill():');
             let _last_line = _getLastLineElement();
-            console.log(_last_line, "lastLIne")
             let _new_node = _last_line.cloneNode(true);
             let _new_input = _new_node.querySelector('input#commandInput');
             if (_new_input) {
                 _new_input.parentElement.firstElementChild.innerText = Terminal.options.guest;
+                _new_input.parentElement.firstElementChild.classList.remove('prefix-root');
                 _new_input.value = "";
                 _new_input.autofocus = true;
                 _last_line.after(_new_node);
@@ -92,22 +95,19 @@ const Terminal = (function () {
         if (cb) { cb(); }
     }
     function _detachEventOnElement(el) {
-        el.removeEventListener("keydown", handleUserInput, false);
+        el.removeEventListener("keydown", _handleUserInput, false);
     }
     function _attachEventToNewInputElement(el) {
-        el.addEventListener("keydown", handleUserInput);
+        el.addEventListener("keydown", _handleUserInput);
     }
 
     function _getOptions(opts) {
         let options = new Object({
-            root: "root@martian:~#",
-            guest: "guest@martian:~#",
+            root: "root@user:~#",
+            guest: "guest@user:~#",
             into: ["Leave as null", "if you don't want bio"],
             bg_color: "green",
-            commands: [
-                { realname: "wiredmartian"},
-                { dob: "September 29, 0001"}
-            ]
+            commands: [{}]
         });
         Object.assign(options, opts);
         Terminal.options = options;
@@ -135,11 +135,14 @@ const Terminal = (function () {
         }
         return result;
     }
-    Terminal("#commandInput", {root: "root@user:~#", bg_color: "red", 
-    commands: [
-        { education: "Durban University of Technology" },
-        { proffession: "JavaScript developer"}
-    ]});
+    Terminal("#commandInput",
+        {
+            root: "root@user:~#",
+            bg_color: "red",
+            commands: [
+                { edu: "Code Academy" },
+                { prof: "developer"}]
+        });
     return Terminal;
 })();
 
