@@ -72,6 +72,9 @@ body {
         color: #008c23;
         font-weight: bolder;
       }
+      .prefix-root {
+        color: #cfcd00 !important;
+      }
       .prefix::after {
         content: ' ';
       }
