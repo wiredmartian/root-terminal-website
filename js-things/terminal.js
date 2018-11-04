@@ -33,7 +33,6 @@ const Terminal = (function () {
                     _clearTerminal();
                     return;
                 }
-                console.log("dont' purge():");
                 let response = _processTerminalInput(input);
                 createNewLine(response);
             }
@@ -43,7 +42,6 @@ const Terminal = (function () {
         let _parent = document.querySelector('.terminal-content');
         let _lines = Array.from(document.querySelectorAll('.line'));
         _lines.forEach((value, index) => {
-            console.log(_lines.length);
             if (_lines.length - 1 !== index) {
                 _parent.removeChild(_lines[index]);
             }
@@ -63,7 +61,6 @@ const Terminal = (function () {
             new_input.value = res;
             let el = document.createElement('span');
             el.innerHTML = res;
-            console.log(el, "html element():");
             new_input.autofocus = true;
         }
         last_el.after(new_node);
@@ -96,7 +93,6 @@ const Terminal = (function () {
         let old_el = el.querySelector('input#commandInput');
         if (old_el) {
             /** detach event listener */
-            console.log("kil():");
             _detachEventOnElement(old_el);
             old_el.removeAttribute("id");
             old_el.removeAttribute("name");
