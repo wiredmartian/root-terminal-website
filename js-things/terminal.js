@@ -28,19 +28,27 @@ const Terminal = (function () {
             let input = Terminal.element.value;
 
             if (typeof input !== "undefined" && input !== "") {
+                /** is input a clear()? */
+                if (input.toLowerCase() === "clear" || input.toLowerCase() === "clear()") {
+                    _clearTerminal();
+                    return;
+                }
                 let response = _processTerminalInput(input);
                 createNewLine(response);
             }
         }
     }
-    
-    function createHTMLElement() {
-        let newelement = document.createElement("span");
-        let node = `<span class=\"prefix\"> ${Terminal.options.root} </span>`;
-        newelement.textContent = Terminal.options.root;
-        newelement.className = "prefix";
-        createNewLine();
+    function _clearTerminal() {
+        let _parent = document.querySelector('.terminal-content');
+        let _lines = Array.from(document.querySelectorAll('.line'));
+        _lines.forEach((value, index) => {
+            if (_lines.length - 1 !== index) {
+                _parent.removeChild(_lines[index]);
+            }
+        });
+        Terminal.element.value = "";
     }
+
 
     function createNewLine(res) {
         let last_el = _getLastLineElement();
@@ -53,7 +61,6 @@ const Terminal = (function () {
             new_input.value = res;
             let el = document.createElement('span');
             el.innerHTML = res;
-            console.log(el, "html element():");
             new_input.autofocus = true;
         }
         last_el.after(new_node);
@@ -86,7 +93,6 @@ const Terminal = (function () {
         let old_el = el.querySelector('input#commandInput');
         if (old_el) {
             /** detach event listener */
-            console.log("kil():");
             _detachEventOnElement(old_el);
             old_el.removeAttribute("id");
             old_el.removeAttribute("name");
