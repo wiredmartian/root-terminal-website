@@ -10,7 +10,6 @@ const Terminal = (function () {
         /** HTML Element Selector */
         if (typeof this.element === "string") {
             let _htmlElement = document.querySelector(this.element);
-            console.log("_defaults():", _htmlElement);
             if (typeof _htmlElement !== "undefined") {
 
                 let isInput = _htmlElement.localName;
@@ -113,10 +112,21 @@ const Terminal = (function () {
             guest: "guest@user:~#",
             into: ["Leave as null", "if you don't want bio"],
             bg_color: "green",
+            prefix: "wm",
             commands: [{}]
         });
         Object.assign(options, opts);
         Terminal.options = options;
+    }
+
+    function _isPrefixValid(prefix) {
+        let _prefix = prefix.toString().toLowerCase().trim();
+        console.log("getPrefix():", _prefix);
+        return (_prefix === Terminal.options.prefix);
+    }
+
+    function _getPrefixFromInput(input) {
+        return input.toString().trim().split(" ")[0].trim();
     }
 
     function _getTerminalCommands() {
@@ -132,6 +142,15 @@ const Terminal = (function () {
         let result = "";
         if (arr.length !== 0 && typeof(input) !== undefined) {
             result =`\"${ input }\" is not recognized as an internal or external command`;
+
+            let _prefix = _getPrefixFromInput(input);
+            if (!_isPrefixValid(_prefix)) {
+                console.log("isPrefixValid():", _prefix);
+                return result;
+            } else {
+                input = input.split(" ")[1].toString().trim();
+                console.log("newINput():")
+            }
             for (let index in arr) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
                     result = Object.values(Terminal.options.commands[index])[0];
