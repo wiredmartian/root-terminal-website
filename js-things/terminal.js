@@ -28,19 +28,29 @@ const Terminal = (function () {
             let input = Terminal.element.value;
 
             if (typeof input !== "undefined" && input !== "") {
+                /** is input a clear()? */
+                if (input.toLowerCase() === "clear" || input.toLowerCase() === "clear()") {
+                    _clearTerminal();
+                    return;
+                }
+                console.log("dont' purge():");
                 let response = _processTerminalInput(input);
                 createNewLine(response);
             }
         }
     }
-    
-    function createHTMLElement() {
-        let newelement = document.createElement("span");
-        let node = `<span class=\"prefix\"> ${Terminal.options.root} </span>`;
-        newelement.textContent = Terminal.options.root;
-        newelement.className = "prefix";
-        createNewLine();
+    function _clearTerminal() {
+        let _parent = document.querySelector('.terminal-content');
+        let _lines = Array.from(document.querySelectorAll('.line'));
+        _lines.forEach((value, index) => {
+            console.log(_lines.length);
+            if (_lines.length - 1 !== index) {
+                _parent.removeChild(_lines[index]);
+            }
+        });
+        Terminal.element.value = "";
     }
+
 
     function createNewLine(res) {
         let last_el = _getLastLineElement();
