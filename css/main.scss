@@ -4,7 +4,7 @@
   font-family:"Source Code Pro", "Courier New", Courier, monospace;
 }
 body {
-  background: #303338;
+  background: rgb(38, 38, 38);
   overflow: hidden;
 }
 
@@ -25,6 +25,12 @@ body {
 }
 
 .container {
+  margin: 2.5%;
+  a {
+    color: #cfcd00;
+    font-weight: bold;
+    text-decoration: none;
+  }
     .window {
       margin: 15px auto;
       width: 80vw;
@@ -46,7 +52,7 @@ body {
     z-index: 9;
 
     .terminal-content {
-      font-size: 20px;
+      font-size: 16px;
       padding-top: 15px;
       .line {
         position: relative;
@@ -64,7 +70,7 @@ body {
           border: none;
           color: white;
           width: 72%;
-          font-size: 18px;
+          font-size: 16px;
         }
       }
 
@@ -86,7 +92,7 @@ body {
 
     #window-title-bar {
       margin: -15px -15px 20px;
-      font-size: 18px;
+      font-size: 16px;
       color: #fff;
       font-weight: bolder;
       text-align: left;
@@ -116,6 +122,6 @@ body {
   text-align: center;
 }
 #typewriter {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 10px;
 }

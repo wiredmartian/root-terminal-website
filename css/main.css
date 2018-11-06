@@ -4,7 +4,7 @@
   font-family: "Source Code Pro", "Courier New", Courier, monospace; }
 
 body {
-  background: #303338;
+  background: #262626;
   overflow: hidden; }
 
 /* Blink Animation */
@@ -18,63 +18,69 @@ body {
     background: white; }
   100% {
     background: transparent; } }
-.container .window {
-  margin: 15px auto;
-  width: 80vw; }
-.container #terminal-window {
-  color: white;
-  background: rgba(0, 0, 0, 0.35);
-  resize: both;
-  overflow: auto;
-  width: 50vw;
-  height: 65vh;
-  /*margin: 50px auto;*/
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 22px;
-  padding: 15px;
-  position: absolute;
-  z-index: 9; }
-  .container #terminal-window .terminal-content {
-    font-size: 20px;
-    padding-top: 15px; }
-    .container #terminal-window .terminal-content .line {
-      position: relative;
-      min-height: 15px;
-      margin: 15px auto; }
-      .container #terminal-window .terminal-content .line input {
-        /*position: absolute;*/
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        opacity: 0.8;
-        background-color: transparent;
-        border: none;
-        color: white;
-        width: 72%;
-        font-size: 18px; }
-    .container #terminal-window .terminal-content .prefix {
-      color: #008c23;
-      font-weight: bolder; }
-    .container #terminal-window .terminal-content .prefix-root {
-      color: #cfcd00 !important; }
-    .container #terminal-window .terminal-content .prefix::after {
-      content: ' '; }
-    .container #terminal-window .terminal-content .cursor {
-      -webkit-animation: 0.5s blink alternate infinite;
-      animation: 0.5s blink alternate infinite; }
-  .container #terminal-window #window-title-bar {
-    margin: -15px -15px 20px;
-    font-size: 18px;
-    color: #fff;
-    font-weight: bolder;
-    text-align: left;
-    padding: 10px;
-    z-index: 10;
-    background: -webkit-gradient(linear, left top, left bottom, from(rgba(90, 90, 90, 0.25)), color-stop(33%, rgba(0, 0, 0, 0.25)));
-    background: -o-linear-gradient(top, rgba(90, 90, 90, 0.25) 0%, rgba(0, 0, 0, 0.25) 33%);
-    background: linear-gradient(to bottom, rgba(90, 90, 90, 0.25) 0%, rgba(0, 0, 0, 0.25) 33%); }
+.container {
+  margin: 2.5%; }
+  .container a {
+    color: #cfcd00;
+    font-weight: bold;
+    text-decoration: none; }
+  .container .window {
+    margin: 15px auto;
+    width: 80vw; }
+  .container #terminal-window {
+    color: white;
+    background: rgba(0, 0, 0, 0.35);
+    resize: both;
+    overflow: auto;
+    width: 50vw;
+    height: 65vh;
+    /*margin: 50px auto;*/
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 22px;
+    padding: 15px;
+    position: absolute;
+    z-index: 9; }
+    .container #terminal-window .terminal-content {
+      font-size: 16px;
+      padding-top: 15px; }
+      .container #terminal-window .terminal-content .line {
+        position: relative;
+        min-height: 15px;
+        margin: 15px auto; }
+        .container #terminal-window .terminal-content .line input {
+          /*position: absolute;*/
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          opacity: 0.8;
+          background-color: transparent;
+          border: none;
+          color: white;
+          width: 72%;
+          font-size: 16px; }
+      .container #terminal-window .terminal-content .prefix {
+        color: #008c23;
+        font-weight: bolder; }
+      .container #terminal-window .terminal-content .prefix-root {
+        color: #cfcd00 !important; }
+      .container #terminal-window .terminal-content .prefix::after {
+        content: ' '; }
+      .container #terminal-window .terminal-content .cursor {
+        -webkit-animation: 0.5s blink alternate infinite;
+        animation: 0.5s blink alternate infinite; }
+    .container #terminal-window #window-title-bar {
+      margin: -15px -15px 20px;
+      font-size: 16px;
+      color: #fff;
+      font-weight: bolder;
+      text-align: left;
+      padding: 10px;
+      z-index: 10;
+      background: -webkit-gradient(linear, left top, left bottom, from(rgba(90, 90, 90, 0.25)), color-stop(33%, rgba(0, 0, 0, 0.25)));
+      background: -o-linear-gradient(top, rgba(90, 90, 90, 0.25) 0%, rgba(0, 0, 0, 0.25) 33%);
+      background: linear-gradient(to bottom, rgba(90, 90, 90, 0.25) 0%, rgba(0, 0, 0, 0.25) 33%); }
 
 .clearfix {
   display: block;
@@ -94,7 +100,7 @@ body {
   text-align: center; }
 
 #typewriter {
-  font-size: 20px;
+  font-size: 16px;
   line-height: 10px; }
 
 /*# sourceMappingURL=main.css.map */
