@@ -47,19 +47,28 @@ const Terminal = (function () {
         });
         Terminal.element.value = "";
     }
+    function _checkOutputIsHTML(output) {
+        return /<[a-z][\s\S]*>/.test(output);
+    }
 
 
     function createNewLine(res) {
-        let last_el = _getLastLineElement();
-        let new_node = last_el.cloneNode(true);
-        let new_input = new_node.querySelector('input#commandInput');
+
+        if (_checkOutputIsHTML(res)) {
+            let container = document.querySelector('.container')
+            let el = document.createElement('div');
+            el.innerHTML = res;
+            container.appendChild(el.firstElementChild);
+            return;
+        }
+        let last_el = _getLastLineElement(); // get last elemnt
+        let new_node = last_el.cloneNode(true); //clone last element
+        let new_input = new_node.querySelector('input#commandInput'); // get input of the new element (cloned)
         if (new_input) {
             /** TODO: this line is too much dependent on the DOM */
-            new_input.parentElement.firstElementChild.innerText = Terminal.options.root;
-            new_input.parentElement.firstElementChild.classList.add('prefix-root');
+            new_input.parentElement.firstElementChild.innerText = Terminal.options.root; // set its innerhtml to root (root@user)
+            new_input.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
             new_input.value = res;
-            let el = document.createElement('span');
-            el.innerHTML = res;
             new_input.autofocus = true;
         }
         last_el.after(new_node);
@@ -166,7 +175,8 @@ const Terminal = (function () {
             bg_color: "red",
             commands: [
                 { edu: "Code Academy" },
-                { prof: "developer"}]
+                { prof: "developer"},
+                { contact: "<a href=\"http://www.github.com/bradtraversy\" target=\"_blank\">Github</a>"}]
         });
     return Terminal;
 })();
