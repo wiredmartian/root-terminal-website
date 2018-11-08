@@ -45,6 +45,7 @@ const Terminal = (function () {
                 _parent.removeChild(_lines[index]);
             }
         });
+        document.querySelector("#typewriter").classList.add("hidden");
         Terminal.element.value = "";
     }
     function _checkOutputIsHTML(output) {
@@ -61,7 +62,7 @@ const Terminal = (function () {
             container.appendChild(el.firstElementChild);
             return;
         }
-        let last_el = _getLastLineElement(); // get last elemnt
+        let last_el = _getLastLineElement(); // get last element
         let new_node = last_el.cloneNode(true); //clone last element
         let new_input = new_node.querySelector('input#commandInput'); // get input of the new element (cloned)
         if (new_input) {
@@ -122,7 +123,7 @@ const Terminal = (function () {
             into: ["Leave as null", "if you don't want bio"],
             bg_color: "green",
             prefix: "wm",
-            commands: [{}]
+            commands: window.commands
         });
         Object.assign(options, opts);
         Terminal.options = options;
@@ -139,7 +140,7 @@ const Terminal = (function () {
     }
 
     function _getTerminalCommands() {
-        let data = (Terminal.options.commands.length > 0) ? Terminal.options.commands : [];
+        let data = (window.commands.length > 0) ? window.commands : [{}];
         let cmd = [];
         data.forEach((value) => {
             cmd.push(Array.from(Object.keys(value)));
@@ -162,22 +163,14 @@ const Terminal = (function () {
             }
             for (let index in arr) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
-                    result = Object.values(Terminal.options.commands[index])[0];
+                    result = Object.values(window.commands[index])[0];
                     break;
                 }
             }
         }
         return result;
     }
-    Terminal("#commandInput",
-        {
-            root: "root@user:~#",
-            bg_color: "red",
-            commands: [
-                { edu: "Code Academy" },
-                { prof: "developer"},
-                { contact: "<a href=\"http://www.github.com/bradtraversy\" target=\"_blank\">Github</a>"}]
-        });
+    Terminal("#commandInput",{});
     return Terminal;
 })();
 
