@@ -106,4 +106,7 @@ body {
     .social-links a img {
       width: 60px; }
 
+.hidden {
+  display: none; }
+
 /*# sourceMappingURL=main.css.map */

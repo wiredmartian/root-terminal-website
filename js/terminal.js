@@ -52,7 +52,8 @@ const Terminal = (function () {
             }
         });
         document.querySelector("#typewriter").classList.add("hidden");
-        Terminal.element.value = "";
+        Terminal.element.innerText = "";
+        Terminal.element.innerHTML = "";
     }
     function _checkOutputIsHTML(output) {
         return /<[a-z][\s\S]*>/.test(output);
@@ -72,7 +73,6 @@ const Terminal = (function () {
         let new_node = last_el.cloneNode(true); //clone last element
         let new_input = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
         if (new_input) {
-            console.log(new_input);
             /** TODO: this line is too much dependent on the DOM */
             new_input.parentElement.firstElementChild.innerText = Terminal.options.root; // set its innerhtml to root (root@user)
             new_input.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
@@ -82,7 +82,6 @@ const Terminal = (function () {
         last_el.after(new_node);
         
         _killElementAfterCloning(last_el, function(){
-            console.log('confirm kill():');
             let _last_line = _getLastLineElement();
             let _new_node = _last_line.cloneNode(true);
             let _new_input = _new_node.querySelector('#commandInput');
@@ -91,7 +90,6 @@ const Terminal = (function () {
                 _new_input.parentElement.firstElementChild.classList.remove('prefix-root');
                 _new_input.innerHTML = "...";
                 _new_input.innerText = "...";
-                _new_input.autofocus = true;
                 _last_line.after(_new_node);
                 _killElementAfterCloning(_last_line, null);
             }
@@ -139,7 +137,6 @@ const Terminal = (function () {
 
     function _isPrefixValid(prefix) {
         let _prefix = prefix.toString().toLowerCase().trim();
-        console.log("getPrefix():", _prefix);
         return (_prefix === Terminal.options.prefix);
     }
 
@@ -163,11 +160,9 @@ const Terminal = (function () {
 
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {
-                console.log("isPrefixValid():", _prefix);
                 return result;
             } else {
                 input = input.split(" ")[1].toString().trim();
-                console.log("newINput():")
             }
             for (let index in arr) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
