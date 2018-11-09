@@ -21,7 +21,7 @@ body {
 .container {
   margin: 2.5%; }
   .container a {
-    color: #cfcd00;
+    color: #fffd00;
     font-weight: bold;
     text-decoration: none; }
   .container .window {
@@ -48,23 +48,18 @@ body {
         position: relative;
         min-height: 15px;
         margin: 15px auto; }
-        .container #terminal-window .terminal-content .line input {
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          opacity: 0.8;
-          background-color: transparent;
-          border: none;
-          color: white;
-          width: 72%;
-          font-size: 16px;
-          caret-color: #008c23; }
+        .container #terminal-window .terminal-content .line #cmd {
+          color: #21f838;
+          padding: 5px;
+          overflow: hidden; }
+        .container #terminal-window .terminal-content .line #commandInput {
+          width: 5px;
+          height: 14px; }
       .container #terminal-window .terminal-content .prefix {
-        color: #008c23;
+        color: #21f838;
         font-weight: bolder; }
       .container #terminal-window .terminal-content .prefix-root {
-        color: #cfcd00 !important; }
+        color: #fffd00 !important; }
       .container #terminal-window .terminal-content .prefix::after {
         content: ' '; }
       .container #terminal-window .terminal-content .cursor {
@@ -88,7 +83,7 @@ body {
   clear: both; }
 
 .hacker-color, b {
-  color: #008c23; }
+  color: #21f838; }
 
 .main-title {
   font-size: 50px;
