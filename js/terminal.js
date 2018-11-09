@@ -61,14 +61,6 @@ const Terminal = (function () {
 
 
     function createNewLine(res) {
-
-        if (_checkOutputIsHTML(res)) {
-            let container = document.querySelector('.container');
-            let el = document.createElement('div');
-            el.innerHTML = res;
-            container.appendChild(el.firstElementChild);
-            return;
-        }
         let last_el = _getLastLineElement(); // get last element
         let new_node = last_el.cloneNode(true); //clone last element
         let new_input = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
@@ -77,7 +69,7 @@ const Terminal = (function () {
             new_input.parentElement.firstElementChild.innerText = Terminal.options.root; // set its innerhtml to root (root@user)
             new_input.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
             new_input.innerHTML = res;
-            new_input.innerText = res;
+            /*new_input.innerText = res;*/
         }
         last_el.after(new_node);
         
@@ -156,7 +148,7 @@ const Terminal = (function () {
         let arr = _getTerminalCommands();
         let result = "";
         if (arr.length !== 0 && typeof(input) !== undefined) {
-            result =`\"${ input }\" is not recognized as an internal or external command`;
+            result =`\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`;
 
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {

@@ -6,4 +6,14 @@ window.commands = [
     { phone: "+27 71 786 2455"},
     { employment: "I'm currently a front-end developer at Nologo Studios"},
     { profession: "Software Developer"},
-    { help: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sit amet magna a lorem dapibus volutpat eu et mauris. Donec sit amet pulvinar leo. Quisque nec laoreet nunc. Vestibulum semper vitae ante a facilisis. Sed vel maximus leo. Aenean tincidunt aliquam volutpat. Phasellus suscipit risus vitae eros aliquet, sit amet pharetra eros blandit. Sed suscipit elit tortor, ut rutrum mi suscipit quis. Fusce volutpat orci mi, sit amet ultricies diam ultricies pulvinar. "}];
+    {
+// language=HTML
+        bio:"<br><br>I am the wiredmartian, a <b>software developer</b> based in Durban, South Africa." +
+            "   I mostly specialize in <b>JavaScript</b>, with <b>Angular</b> as framework of choice." +
+            "   I also write <b>NodeJS</b> and <b>C#</b> code. I have about 1.5 years of experience in the field of software development" +
+            "   I'd be a millionaire, if only... if only I could finish my side projects.," +
+            "   If you wanna know more about me, type in any of the commands listed below. Leave out the <b>$</b> sign\",\n" +
+            "   <strong>commands:</strong><br><br>" +
+            "   <strong>$ wm realname</strong><br>" +
+            "   <strong>$ wm education</strong><br>" +
+            "   <strong>$ wm contacts</strong><br>"}];
