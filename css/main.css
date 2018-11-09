@@ -49,7 +49,6 @@ body {
         min-height: 15px;
         margin: 15px auto; }
         .container #terminal-window .terminal-content .line input {
-          /*position: absolute;*/
           top: 0;
           left: 0;
           right: 0;
@@ -59,7 +58,8 @@ body {
           border: none;
           color: white;
           width: 72%;
-          font-size: 16px; }
+          font-size: 16px;
+          caret-color: #008c23; }
       .container #terminal-window .terminal-content .prefix {
         color: #008c23;
         font-weight: bolder; }
@@ -103,7 +103,12 @@ body {
   font-size: 16px;
   line-height: 10px; }
 
-.hidden {
-  display: none !important; }
+.social-links {
+  width: 80px;
+  float: left; }
+  .social-links a {
+    display: block; }
+    .social-links a img {
+      width: 60px; }
 
 /*# sourceMappingURL=main.css.map */

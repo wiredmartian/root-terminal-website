@@ -60,7 +60,6 @@ body {
         margin: 15px auto;
 
         input {
-          /*position: absolute;*/
           top: 0;
           left: 0;
           right: 0;
@@ -71,6 +70,7 @@ body {
           color: white;
           width: 72%;
           font-size: 16px;
+          caret-color: #008c23;
         }
       }
 
@@ -125,3 +125,16 @@ body {
   font-size: 16px;
   line-height: 10px;
 }
+
+.social-links {
+  width: 80px;
+  float: left;
+  a {
+    display: block;
+
+    img {
+      width: 60px;
+    }
+  }
+}
+

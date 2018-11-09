@@ -23,7 +23,7 @@ const Terminal = (function () {
 
     }
     function _handleUserInput(e) {
-        if (e.key === "Enter" && e.keyCode === 13 && e.isTrusted) {
+        if (e.key === "Enter" && e.which === 13 && e.isTrusted) {
             let input = Terminal.element.value;
 
             if (typeof input !== "undefined" && input !== "") {
@@ -56,7 +56,7 @@ const Terminal = (function () {
     function createNewLine(res) {
 
         if (_checkOutputIsHTML(res)) {
-            let container = document.querySelector('.container')
+            let container = document.querySelector('.container');
             let el = document.createElement('div');
             el.innerHTML = res;
             container.appendChild(el.firstElementChild);
