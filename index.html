@@ -8,24 +8,26 @@
 <body>
     <div class="container">
 
-        <a href="https://github.com/wiredmartian" target="_blank">
-            <img src="_public/Github.png"/>
-        </a>
-        <a href="https://github.com/wiredmartian" target="_blank">
-            <img src="_public/Linkedin.png"/>
-        </a>
-        <a href="https://github.com/wiredmartian" target="_blank">
-            <img src="_public/Facebook.png"/>
-        </a>
-        <a href="https://github.com/wiredmartian" target="_blank">
-            <img src="_public/Instagram.png"/>
-        </a>
-        <a href="https://github.com/wiredmartian" target="_blank">
-            <img src="_public/Twitter.png" />
-        </a>
-        <a href="https://github.com/wiredmartian" target="_blank">
-            <img src="_public/Reddit.png"/>
-        </a>
+        <div class="social-links">
+            <a href="https://github.com/wiredmartian" target="_blank">
+                <img src="_public/Github.png"/>
+            </a>
+            <a href="https://github.com/wiredmartian" target="_blank">
+                <img src="_public/Linkedin.png"/>
+            </a>
+            <a href="https://github.com/wiredmartian" target="_blank">
+                <img src="_public/Facebook.png"/>
+            </a>
+            <a href="https://github.com/wiredmartian" target="_blank">
+                <img src="_public/Instagram.png"/>
+            </a>
+            <a href="https://github.com/wiredmartian" target="_blank">
+                <img src="_public/Twitter.png" />
+            </a>
+            <a href="https://github.com/wiredmartian" target="_blank">
+                <img src="_public/Reddit.png"/>
+            </a>
+        </div>
 
 
         <div class="window">
@@ -39,7 +41,9 @@
                         <span class="prefix">guest@user:~# </span>
                         <span></span>
                         <span class="blink"></span>
-                        <input class="commandInput" name="commandInput" id="commandInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off">
+                       <span id="cmd">
+                            <span id="commandInput" class="caret" contenteditable="true" spellcheck="false">.</span>
+                       </span>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -49,7 +53,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
-
     <script src="js/terminal.js"></script>
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>

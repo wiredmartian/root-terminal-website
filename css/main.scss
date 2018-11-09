@@ -27,7 +27,7 @@ body {
 .container {
   margin: 2.5%;
   a {
-    color: #cfcd00;
+    color: #fffd00;
     font-weight: bold;
     text-decoration: none;
   }
@@ -59,27 +59,24 @@ body {
         min-height: 15px;
         margin: 15px auto;
 
-        input {
-          /*position: absolute;*/
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          opacity: 0.8;
-          background-color: transparent;
-          border: none;
-          color: white;
-          width: 72%;
-          font-size: 16px;
+        #cmd {
+          color: #21f838;
+          padding: 5px;
+          overflow: hidden;
         }
+        #commandInput {
+          width: 5px;
+          height: 14px;
+        }
+
       }
 
       .prefix {
-        color: #008c23;
+        color: #21f838;
         font-weight: bolder;
       }
       .prefix-root {
-        color: #cfcd00 !important;
+        color: #fffd00 !important;
       }
       .prefix::after {
         content: ' ';
@@ -110,7 +107,7 @@ body {
   clear: both;
 }
 .hacker-color, b {
-  color: #008c23;
+  color: #21f838;
 }
 .main-title {
   font-size: 50px;
@@ -125,3 +122,17 @@ body {
   font-size: 16px;
   line-height: 10px;
 }
+
+.social-links {
+  width: 80px;
+  float: left;
+  a {
+    display: block;
+
+    img {
+      width: 60px;
+    }
+  }
+}
+
+

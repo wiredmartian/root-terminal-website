@@ -1,5 +1,3 @@
-// import brain from './brain';
-
 dragElement(document.getElementById("terminal-window"));
 
 let bio = [
@@ -12,8 +10,7 @@ let bio = [
     "<strong>commands:</strong><br>^500<br>^1000" +
     "<strong>$ wm realname</strong><br>" +
     "<strong>$ wm education</strong><br>" +
-    "<strong>$ wm contacts</strong><br>"  +
-    "<strong>$ wm <strike>rel-status</strike> (deprecated) </strong><br>" ];
+    "<strong>$ wm contacts</strong><br>" ];
 
 function dragElement(elmnt) {
     var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
