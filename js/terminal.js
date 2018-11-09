@@ -10,11 +10,11 @@ const Terminal = (function () {
         /** HTML Element Selector */
         if (typeof this.element === "string") {
             let _htmlElement = document.querySelector(this.element);
-            if (typeof _htmlElement !== "undefined") {
-
-                let isInput = _htmlElement.localName;
-                if (isInput === "input") {
+            if (typeof _htmlElement !== "undefined" && _htmlElement !== null) {
+                let isSpan = _htmlElement.localName;
+                if (isSpan === "span") {
                     Terminal.element = _htmlElement;
+                    console.log(_htmlElement);
                     /** attach listener on Enter */
                     Terminal.element.addEventListener("keydown", _handleUserInput);
                 }
@@ -23,10 +23,15 @@ const Terminal = (function () {
 
     }
     function _handleUserInput(e) {
-        if (e.key === "Enter" && e.which === 13 && e.isTrusted) {
-            let input = Terminal.element.value;
 
-            if (typeof input !== "undefined" && input !== "") {
+        if (e.key === "Enter" && e.which === 13 && e.isTrusted) {
+            let input = "";
+            if (e.innerHTML === e.innerText) {
+                input = Terminal.element.innerText;
+            }
+
+
+            if (typeof input !== "undefined" && input != null && input !== "") {
                 /** is input a clear()? */
                 if (input.toLowerCase() === "clear" || input.toLowerCase() === "clear()") {
                     _clearTerminal();
@@ -64,13 +69,14 @@ const Terminal = (function () {
         }
         let last_el = _getLastLineElement(); // get last element
         let new_node = last_el.cloneNode(true); //clone last element
-        let new_input = new_node.querySelector('input#commandInput'); // get input of the new element (cloned)
+        let new_input = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
         if (new_input) {
+            console.log(new_input);
             /** TODO: this line is too much dependent on the DOM */
             new_input.parentElement.firstElementChild.innerText = Terminal.options.root; // set its innerhtml to root (root@user)
             new_input.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
-            new_input.value = res;
-            new_input.autofocus = true;
+            new_input.innerHTML = res;
+            new_input.innerText = res;
         }
         last_el.after(new_node);
         
@@ -78,11 +84,12 @@ const Terminal = (function () {
             console.log('confirm kill():');
             let _last_line = _getLastLineElement();
             let _new_node = _last_line.cloneNode(true);
-            let _new_input = _new_node.querySelector('input#commandInput');
+            let _new_input = _new_node.querySelector('#commandInput');
             if (_new_input) {
                 _new_input.parentElement.firstElementChild.innerText = Terminal.options.guest;
                 _new_input.parentElement.firstElementChild.classList.remove('prefix-root');
-                _new_input.value = "";
+                _new_input.innerHTML = "...";
+                _new_input.innerText = "...";
                 _new_input.autofocus = true;
                 _last_line.after(_new_node);
                 _killElementAfterCloning(_last_line, null);
