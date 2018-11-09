@@ -61,14 +61,6 @@ const Terminal = (function () {
 
 
     function createNewLine(res) {
-
-        /*if (_checkOutputIsHTML(res)) {
-            let container = document.querySelector('.container');
-            let el = document.createElement('div');
-            el.innerHTML = res;
-            container.appendChild(el.firstElementChild);
-            return;
-        }*/
         let last_el = _getLastLineElement(); // get last element
         let new_node = last_el.cloneNode(true); //clone last element
         let new_input = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
