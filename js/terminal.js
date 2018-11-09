@@ -24,7 +24,8 @@ const Terminal = (function () {
     }
     function _handleUserInput(e) {
 
-        if (e.key === "Enter" && e.which === 13 && e.isTrusted) {
+        if (e.key === "Enter" && e.which === 13 && !e.shiftKey) {
+            e.preventDefault();
             let input = "";
             if (e.innerHTML === e.innerText) {
                 input = Terminal.element.innerText;
@@ -106,12 +107,12 @@ const Terminal = (function () {
     }
 
     function _killElementAfterCloning(el, cb) {
-        let old_el = el.querySelector('input#commandInput');
+        let old_el = el.querySelector('#commandInput');
         if (old_el) {
             /** detach event listener */
             _detachEventOnElement(old_el);
+            old_el.removeAttribute("contenteditable");
             old_el.removeAttribute("id");
-            old_el.removeAttribute("name");
             old_el.disabled = true;
         }
         if (cb) { cb(); }
