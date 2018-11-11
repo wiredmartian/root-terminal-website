@@ -168,46 +168,40 @@ const Terminal = (function () {
 
     /** make the terminal draggable */
 
-    function dragElement(elmnt) {
-        elmnt = document.querySelector(elmnt);
-        console.log(elmnt);
+    function dragElement(el) {
+        el = document.querySelector(el);
+        let _titleblock = document.querySelector("#window-title-bar");
+
         let position1 = 0, position2 = 0, position3 = 0, position4 = 0;
-        if (document.querySelector("#window-title-bar")) {
-            /* if present, the header is where you move the DIV from:*/
-            document.querySelector("#window-title-bar").addEventListener("onmousedown", dragMouseDown);
+        if (_titleblock) {
+            _titleblock.onmousedown = dragMouseDown;
         } else {
-            /* otherwise, move the DIV from anywhere inside the DIV:*/
-            elmnt.addEventListener("onmousedown", dragMouseDown);
+            el.onmousedown = dragMouseDown;
         }
 
         function dragMouseDown(e) {
             e = e || window.event;
             e.preventDefault();
-            // get the mouse cursor position at startup:
             position3 = e.clientX;
             position4 = e.clientY;
-            document.addEventListener("onmouseup", closeDragElement);
-            // call a function whenever the cursor moves:
-            document.addEventListener("onmousemove", elementDrag);
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
         }
 
         function elementDrag(e) {
             e = e || window.event;
             e.preventDefault();
-            // calculate the new cursor position:
             position1 = position3 - e.clientX;
             position2 = position4 - e.clientY;
             position3 = e.clientX;
             position4 = e.clientY;
-            // set the element's new position:
-            elmnt.top = (elmnt.offsetTop - position2) + "px";
-            elmnt.left = (elmnt.offsetLeft - position1) + "px";
+            el.style.top = (el.offsetTop - position2) + "px";
+            el.style.left = (el.offsetLeft - position1) + "px";
         }
 
         function closeDragElement() {
-            /* stop moving when mouse button is released:*/
-            document.addEventListener("onmouseup", null);
-            document.addEventListener("onmousemove", null);
+            document.onmouseup = null;
+            document.onmousemove = null;
         }
     }
 
