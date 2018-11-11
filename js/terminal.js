@@ -4,6 +4,7 @@ const Terminal = (function () {
         this.options = {};
         _defaults();
         _getOptions(Options);
+        dragElement("#terminal-window");
     };
 
     function _defaults() {
@@ -14,7 +15,6 @@ const Terminal = (function () {
                 let isSpan = _htmlElement.localName;
                 if (isSpan === "span") {
                     Terminal.element = _htmlElement;
-                    console.log(_htmlElement);
                     /** attach listener on Enter */
                     Terminal.element.addEventListener("keydown", _handleUserInput);
                 }
@@ -165,6 +165,46 @@ const Terminal = (function () {
         }
         return result;
     }
+
+    /** make the terminal draggable */
+
+    function dragElement(el) {
+        el = document.querySelector(el);
+        let _titleblock = document.querySelector("#window-title-bar");
+
+        let position1 = 0, position2 = 0, position3 = 0, position4 = 0;
+        if (_titleblock) {
+            _titleblock.onmousedown = dragMouseDown;
+        } else {
+            el.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            position3 = e.clientX;
+            position4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            position1 = position3 - e.clientX;
+            position2 = position4 - e.clientY;
+            position3 = e.clientX;
+            position4 = e.clientY;
+            el.style.top = (el.offsetTop - position2) + "px";
+            el.style.left = (el.offsetLeft - position1) + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
     Terminal("#commandInput",{});
     return Terminal;
 })();

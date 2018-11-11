@@ -7,19 +7,8 @@ body {
   background: #262626;
   overflow: hidden; }
 
-/* Blink Animation */
-@-webkit-keyframes blink {
-  0% {
-    background: white; }
-  100% {
-    background: transparent; } }
-@keyframes blink {
-  0% {
-    background: white; }
-  100% {
-    background: transparent; } }
 .container {
-  margin: 2.5%; }
+  margin: 2%; }
   .container a {
     color: #fffd00;
     font-weight: bold;
@@ -60,11 +49,6 @@ body {
         font-weight: bolder; }
       .container #terminal-window .terminal-content .prefix-root {
         color: #fffd00 !important; }
-      .container #terminal-window .terminal-content .prefix::after {
-        content: ' '; }
-      .container #terminal-window .terminal-content .cursor {
-        -webkit-animation: 0.5s blink alternate infinite;
-        animation: 0.5s blink alternate infinite; }
     .container #terminal-window #window-title-bar {
       margin: -15px -15px 20px;
       font-size: 16px;
