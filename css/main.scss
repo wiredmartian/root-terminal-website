@@ -33,7 +33,7 @@ body {
     width: 50vw;
     height: 65vh;
     /*margin: 50px auto;*/
-    font-size: 15px;
+
     font-weight: 500;
     line-height: 22px;
     padding: 15px;
@@ -41,7 +41,7 @@ body {
     z-index: 9;
 
     .terminal-content {
-      font-size: 16px;
+
       padding-top: 15px;
       .line {
         position: relative;
@@ -56,16 +56,18 @@ body {
         #commandInput {
           width: 5px;
           height: 14px;
+          font-size: 14px;
         }
 
       }
 
       .prefix {
         color: $green-color;
-        font-weight: bolder;
+        font-size: 14px;
       }
       .prefix-root {
-        color: $yellow-color !important;
+        color: $yellow-color;
+        font-size: 14px;
       }
     }
 
@@ -118,6 +120,9 @@ body {
 }
 .hidden {
   display: none;
+}
+[contenteditable]:focus {
+  outline: none;
 }
 
 

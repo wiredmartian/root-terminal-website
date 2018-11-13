@@ -12,8 +12,8 @@ const Terminal = (function () {
         if (typeof this.element === "string") {
             let _htmlElement = document.querySelector(this.element);
             if (typeof _htmlElement !== "undefined" && _htmlElement !== null) {
-                let isSpan = _htmlElement.localName;
-                if (isSpan === "span") {
+                let isSmall = _htmlElement.localName;
+                if (isSmall === "small") {
                     Terminal.element = _htmlElement;
                     /** attach listener on Enter */
                     Terminal.element.addEventListener("keydown", _handleUserInput);
