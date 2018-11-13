@@ -24,14 +24,12 @@ body {
     width: 50vw;
     height: 65vh;
     /*margin: 50px auto;*/
-    font-size: 15px;
     font-weight: 500;
     line-height: 22px;
     padding: 15px;
     position: absolute;
     z-index: 9; }
     .container #terminal-window .terminal-content {
-      font-size: 16px;
       padding-top: 15px; }
       .container #terminal-window .terminal-content .line {
         position: relative;
@@ -43,12 +41,14 @@ body {
           overflow: hidden; }
         .container #terminal-window .terminal-content .line #commandInput {
           width: 5px;
-          height: 14px; }
+          height: 14px;
+          font-size: 14px; }
       .container #terminal-window .terminal-content .prefix {
         color: #21f838;
-        font-weight: bolder; }
+        font-size: 14px; }
       .container #terminal-window .terminal-content .prefix-root {
-        color: #fffd00 !important; }
+        color: #fffd00;
+        font-size: 14px; }
     .container #terminal-window #window-title-bar {
       margin: -15px -15px 20px;
       font-size: 16px;
@@ -92,5 +92,8 @@ body {
 
 .hidden {
   display: none; }
+
+[contenteditable]:focus {
+  outline: none; }
 
 /*# sourceMappingURL=main.css.map */

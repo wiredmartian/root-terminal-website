@@ -12,8 +12,8 @@ const Terminal = (function () {
         if (typeof this.element === "string") {
             let _htmlElement = document.querySelector(this.element);
             if (typeof _htmlElement !== "undefined" && _htmlElement !== null) {
-                let isSpan = _htmlElement.localName;
-                if (isSpan === "span") {
+                let isSmall = _htmlElement.localName;
+                if (isSmall === "small") {
                     Terminal.element = _htmlElement;
                     /** attach listener on Enter */
                     Terminal.element.addEventListener("keydown", _handleUserInput);
@@ -203,6 +203,35 @@ const Terminal = (function () {
             document.onmouseup = null;
             document.onmousemove = null;
         }
+    }
+    initializeTyping();
+    function initializeTyping() {
+
+        let intro = "";
+        (function() {
+            let _xhttp = new XMLHttpRequest();
+            _xhttp.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) {
+                    intro = this.responseText;
+                    animateTyping(intro)
+                }
+
+            };
+            _xhttp.open("GET", "../_htmlsnippets/_intro.html", false);
+            _xhttp.send();
+        })();
+    }
+    function animateTyping(info) {
+
+        let typeheaderOptions = {
+            strings: Array.from(info.split(",")),
+            startDelay: 1000,
+            typeSpeed: 40,
+            backSpeed: 10,
+            cursorChar: '_'
+        };
+        console.log(typeheaderOptions.strings);
+        new Typed("#typewriter", typeheaderOptions);
     }
 
     Terminal("#commandInput",{});

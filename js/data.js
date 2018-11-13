@@ -12,8 +12,4 @@ window.commands = [
             "   I mostly specialize in <b>JavaScript</b>, with <b>Angular</b> as framework of choice." +
             "   I also write <b>NodeJS</b> and <b>C#</b> code. I have about 1.5 years of experience in the field of software development" +
             "   I'd be a millionaire, if only... if only I could finish my side projects.," +
-            "   If you wanna know more about me, type in any of the commands listed below. Leave out the <b>$</b> sign\",\n" +
-            "   <strong>commands:</strong><br><br>" +
-            "   <strong>$ wm realname</strong><br>" +
-            "   <strong>$ wm education</strong><br>" +
-            "   <strong>$ wm contacts</strong><br>"}];
+            "   If you wanna know more about me, type in any of the commands listed below. Leave out the <b>$</b> sign\",\n"}];
