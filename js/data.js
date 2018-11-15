@@ -1,9 +1,9 @@
 window.commands = [
-    { name : "Solomzi Jikani" },
-    { location: "Kloof, KwaZulu-Natal in South Africa"},
+    { name : "wiredmartian" },
+    { location: "KwaZulu-Natal in South Africa"},
     { languages: "Xhosa (native), and English"},
-    { email: "solomzi.jikani@gmail.com"},
-    { phone: "+27 71 786 2455"},
+    { email: "martian@gmail.com"},
+    { phone: "+00 00 000 0000"},
     { employment: "I'm currently a front-end developer at Nologo Studios"},
     { profession: "Software Developer"},
     {

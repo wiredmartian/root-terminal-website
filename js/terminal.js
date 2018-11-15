@@ -236,6 +236,10 @@ const Terminal = (function () {
         _xhttp.open("GET", "../_htmlsnippets/_intro.html", false);
         _xhttp.send();
     }
+
+    function help() {
+        /** do help things here*/
+    }
     function animateTyping(intro) {
 
         let typeheaderOptions = {
