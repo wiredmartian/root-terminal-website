@@ -1,10 +1,15 @@
 const Terminal = (function () {
+    let _xhttp = new XMLHttpRequest();
     const Terminal = function (HTMLElementId, Options) {
-        this.element = HTMLElementId;
-        this.options = {};
-        _defaults();
-        _getOptions(Options);
-        dragElement("#terminal-window");
+        _loadTerminalHTML(function (res) {
+            if (res) {
+                this.element = HTMLElementId;
+                this.options = {};
+                _defaults();
+                _getOptions(Options);
+                dragElement("#terminal-window");
+            }
+        });
     };
 
     function _defaults() {
@@ -204,33 +209,42 @@ const Terminal = (function () {
             document.onmousemove = null;
         }
     }
-    initializeTyping();
-    function initializeTyping() {
 
-        let intro = "";
-        (function() {
-            let _xhttp = new XMLHttpRequest();
-            _xhttp.onreadystatechange = function() {
-                if (this.readyState === 4 && this.status === 200) {
-                    intro = this.responseText;
-                    animateTyping(intro)
+    function _loadTerminalHTML(cb) {
+        _xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                let _container = document.querySelector("#terminal-container");
+                if (_container && _checkOutputIsHTML(this.responseText)) {
+                    _container.innerHTML = this.responseText;
+                    initializeTyping();
+                    cb(true);
                 }
-
-            };
-            _xhttp.open("GET", "../_htmlsnippets/_intro.html", false);
-            _xhttp.send();
-        })();
+                cb();
+            }
+        };
+        _xhttp.open("GET", "../_htmlsnippets/_terminal.html", true);
+        _xhttp.send();
     }
-    function animateTyping(info) {
+    function initializeTyping() {
+        let intro = "";
+        _xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                intro = this.responseText;
+                animateTyping(intro)
+            }
+        };
+        _xhttp.open("GET", "../_htmlsnippets/_intro.html", false);
+        _xhttp.send();
+    }
+    function animateTyping(intro) {
 
         let typeheaderOptions = {
-            strings: Array.from(info.split(",")),
+            strings: Array.from(intro.split(",")), // Touch ye NOT, this piece of code. What??
             startDelay: 1000,
             typeSpeed: 40,
             backSpeed: 10,
             cursorChar: '_'
         };
-        console.log(typeheaderOptions.strings);
         new Typed("#typewriter", typeheaderOptions);
     }
 
