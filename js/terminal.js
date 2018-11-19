@@ -1,28 +1,28 @@
-const Terminal = (function () {
+'use strict';
+function Terminal(element, options) {
+    let _self = this;
+    _self.options = options;
+    _self.element = element;
     let _xhttp = new XMLHttpRequest();
-    const Terminal = function (HTMLElementId, Options) {
-        _loadTerminalHTML(function (res) {
-            if (res) {
-                this.element = HTMLElementId;
-                this.options = {};
-                _defaults();
-                _getOptions(Options);
-                dragElement("#terminal-window");
-            }
-        });
-    };
+    _loadTerminalHTML(function (res) {
+        if (res) {
+            _defaults();
+            _getOptions(_self.options);
+            dragElement("#terminal-window");
+        }
+    });
 
     function _defaults() {
         /** HTML Element Selector */
-        if (typeof this.element === "string") {
-            let _htmlElement = document.querySelector(this.element);
+        if (typeof _self.element === "string") {
+            let _htmlElement = document.querySelector(_self.element);
             if (typeof _htmlElement !== "undefined" && _htmlElement !== null) {
                 let isSmall = _htmlElement.localName;
                 if (isSmall === "small") {
-                    Terminal.element = _htmlElement;
+                    _self.element = _htmlElement;
                     /** attach listener on Enter */
                     _htmlElement.focus(); /** auto focus */
-                    Terminal.element.addEventListener("keydown", _handleUserInput);
+                    _self.element.addEventListener("keydown", _handleUserInput);
                 }
             }
         }
@@ -34,7 +34,7 @@ const Terminal = (function () {
             e.preventDefault();
             let input = "";
             if (e.innerHTML === e.innerText) {
-                input = Terminal.element.innerText;
+                input = _self.element.innerText;
             }
 
 
@@ -58,8 +58,8 @@ const Terminal = (function () {
             }
         });
         document.querySelector("#typewriter").classList.add("hidden");
-        Terminal.element.innerText = "";
-        Terminal.element.innerHTML = "";
+        _self.element.innerText = "";
+        _self.element.innerHTML = "";
     }
     function _checkOutputIsHTML(output) {
         return /<[a-z][\s\S]*>/.test(output);
@@ -72,7 +72,7 @@ const Terminal = (function () {
         let new_input = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
         if (new_input) {
             /** TODO: this line is too much dependent on the DOM */
-            new_input.parentElement.firstElementChild.innerText = Terminal.options.root; // set its innerhtml to root (root@user)
+            new_input.parentElement.firstElementChild.innerText = _self.options.root; // set its innerhtml to root (root@user)
             new_input.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
             new_input.innerHTML = res;
             /*new_input.innerText = res;*/
@@ -84,7 +84,7 @@ const Terminal = (function () {
             let _new_node = _last_line.cloneNode(true);
             let _new_input = _new_node.querySelector('#commandInput');
             if (_new_input) {
-                _new_input.parentElement.firstElementChild.innerText = Terminal.options.guest;
+                _new_input.parentElement.firstElementChild.innerText = _self.options.guest;
                 _new_input.parentElement.firstElementChild.classList.remove('prefix-root');
                 _new_input.innerHTML = "...";
                 _new_input.innerText = "...";
@@ -92,7 +92,7 @@ const Terminal = (function () {
                 _last_line.after(_new_node);
                 _killElementAfterCloning(_last_line, null);
             }
-            Terminal.element = _new_input;
+            _self.element = _new_input;
             _attachEventToNewInputElement(_new_input)
         })
         
@@ -122,21 +122,24 @@ const Terminal = (function () {
     }
 
     function _getOptions(opts) {
+        let _cmds = _self.options.commands;
+        if (_cmds && _self.options.commands.constructor === Array) { // Array of objects
+            window.commands = _cmds;
+        }
         let options = new Object({
             root: "root@user:~#",
             guest: "guest@user:~#",
-            into: ["Leave as null", "if you don't want bio"],
-            bg_color: "green",
+            intro: ["Leave as null", "if you don't want bio"],
             prefix: "wm",
             commands: window.commands
         });
         Object.assign(options, opts);
-        Terminal.options = options;
+        _self.options = options;
     }
 
     function _isPrefixValid(prefix) {
         let _prefix = prefix.toString().toLowerCase().trim();
-        return (_prefix === Terminal.options.prefix);
+        return (_prefix === _self.options.prefix);
     }
 
     function _getPrefixFromInput(input) {
@@ -235,26 +238,45 @@ const Terminal = (function () {
                 animateTyping(intro)
             }
         };
-        _xhttp.open("GET", "../_htmlsnippets/_intro.html", false);
+        _xhttp.open("GET", "../_htmlsnippets/_intro.html", true);
         _xhttp.send();
     }
 
     function help() {
         /** do help things here*/
     }
-    function animateTyping(intro) {
 
-        let typeheaderOptions = {
-            strings: Array.from(intro.split(",")), // Touch ye NOT, this piece of code. What??
+    function initTyped(opts) {
+        if (window.Typed) {
+            new Typed("#typewriter", opts);
+        }
+    }
+    
+    function getIntroFromOptions() {
+        let _intro = _self.options.intro;
+        if (_intro && _self.options.intro.constructor === Array) {
+            return _intro;
+        }
+        return undefined;
+    }
+    function animateTyping(intro) {
+        let _intro = getIntroFromOptions();
+        if (_intro) {
+            intro = _intro;
+        } else {
+            intro = Array.from(intro.split(",")); // Touch ye NOT, this piece of code. What??
+        }
+
+        let options = {
+            strings: intro,
             startDelay: 1000,
             typeSpeed: 40,
             backSpeed: 10,
             cursorChar: '_'
         };
-        new Typed("#typewriter", typeheaderOptions);
+        initTyped(options);
     }
+}
 
-    Terminal("#commandInput",{});
-    return Terminal;
-})();
+//new Terminal("#commandInput",{});
 
