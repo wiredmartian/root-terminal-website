@@ -21,6 +21,7 @@ const Terminal = (function () {
                 if (isSmall === "small") {
                     Terminal.element = _htmlElement;
                     /** attach listener on Enter */
+                    _htmlElement.focus(); /** auto focus */
                     Terminal.element.addEventListener("keydown", _handleUserInput);
                 }
             }
@@ -87,6 +88,7 @@ const Terminal = (function () {
                 _new_input.parentElement.firstElementChild.classList.remove('prefix-root');
                 _new_input.innerHTML = "...";
                 _new_input.innerText = "...";
+                _new_input.focus();
                 _last_line.after(_new_node);
                 _killElementAfterCloning(_last_line, null);
             }
