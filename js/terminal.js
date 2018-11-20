@@ -216,19 +216,32 @@ function Terminal(element, options) {
     }
 
     function _loadTerminalHTML(cb) {
-        _xhttp.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
-                let _container = document.querySelector("#terminal-container");
-                if (_container && _checkOutputIsHTML(this.responseText)) {
-                    _container.innerHTML = this.responseText;
-                    initializeTyping();
-                    cb(true);
-                }
-                cb();
-            }
-        };
-        _xhttp.open("GET", "../_htmlsnippets/_terminal.html", true);
-        _xhttp.send();
+        // language=HTML
+        let _template = "<div class=\"window\">" +
+            "    <div id=\"terminal-window\" class=\"terminal\">" +
+            "        <div id=\"window-title-bar\">root@wiredmartian:~</div>" +
+            "        <div class=\"typewriter-container\"><span id=\"typewriter\"></span></div>" +
+            "        <div class=\"terminal-content\">" +
+            "            <div class=\"line\">" +
+            "                <span class=\"prefix\">guest@user:~# </span>" +
+            "                <span></span>" +
+            "                <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">.</small>" +
+            "            </div>" +
+            "        </div>" +
+            "        <div class=\"clearfix\"></div>" +
+            "    </div>" +
+            "</div>";
+
+        let _container = document.querySelector("#terminal-container");
+        if (_container && _checkOutputIsHTML(_template)) {
+            _container.innerHTML = _template;
+            initializeTyping();
+            cb(true);
+        } else {
+            cb()
+        }
+
+
     }
     function initializeTyping() {
         let intro = "";
