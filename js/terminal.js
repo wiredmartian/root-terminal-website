@@ -129,7 +129,7 @@ function Terminal(element, options) {
         let options = new Object({
             root: "root@user:~#",
             guest: "guest@user:~#",
-            intro: ["Leave as null", "if you don't want bio"],
+            intro: "",
             prefix: "wm",
             commands: window.commands
         });
@@ -157,7 +157,7 @@ function Terminal(element, options) {
     function _processTerminalInput(input = "dob") {
         let arr = _getTerminalCommands();
         let result = "";
-        if (arr.length !== 0 && typeof(input) !== undefined) {
+        if (arr.length !== 0 && typeof(input) !== 'undefined') {
             result =`\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`;
 
             let _prefix = _getPrefixFromInput(input);
@@ -244,15 +244,22 @@ function Terminal(element, options) {
 
     }
     function initializeTyping() {
-        let intro = "";
-        _xhttp.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
-                intro = this.responseText;
-                animateTyping(intro)
+        let intro = "<span style=\"color:#21f838\"><small>Installing wm-terminal...</small></span>^5000<br>" +
+            "<span style=\"color:#21f838\"><small>Initializing...</small></span>^3000<br>" +
+            "<span style=\"color:#21f838\"><small>Complete!</small></span><br><br>" +
+            "<small>INSTRUCTIONS:</small><br><br>" +
+            "<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
+            "Use the <span style=\"color:#fffd00\">$ wm help</span> command to view all the available commands. ^1000" +
+            "Use <span style=\"color:#fffd00\">$ clear()</span> to clear this message</small>";
+
+        /** wait for options init before running typed.js */
+        setTimeout(function () {
+            if (typeof (_self.options.intro) !== "undefined" && _self.options.intro !== "") {
+                intro = _self.options.intro;
             }
-        };
-        _xhttp.open("GET", "../_htmlsnippets/_intro.html", true);
-        _xhttp.send();
+            animateTyping(intro);
+        },500)
+
     }
 
     function help() {
@@ -291,5 +298,5 @@ function Terminal(element, options) {
     }
 }
 
-//new Terminal("#commandInput",{});
+let t = new Terminal("#commandInput",{});
 
