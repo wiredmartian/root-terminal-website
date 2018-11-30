@@ -3,15 +3,16 @@ function Terminal(element, options) {
     let _self = this;
     _self.options = options;
     _self.element = element;
-    let _xhttp = new XMLHttpRequest();
-    _loadTerminalHTML(function (res) {
-        if (res) {
-            _defaults();
-            _getOptions(_self.options);
-            dragElement("#terminal-window");
-        }
-    });
-
+    init();
+    function init() {
+        _loadTerminalHTML(function (res) {
+            if (res) {
+                _defaults();
+                _getOptions(_self.options);
+                dragElement("#terminal-window");
+            }
+        });
+    }
     function _defaults() {
         /** HTML Element Selector */
         if (typeof _self.element === "string") {
@@ -24,9 +25,12 @@ function Terminal(element, options) {
                     _htmlElement.focus(); /** auto focus */
                     _self.element.addEventListener("keydown", _handleUserInput);
                 }
+            } else {
+                console.info(`The element ${_self.element} was not found`);
             }
+        } else {
+            console.info(`${_self.element} unexpected element`);
         }
-
     }
     function _handleUserInput(e) {
 
@@ -244,8 +248,8 @@ function Terminal(element, options) {
 
     }
     function initializeTyping() {
-        let intro = "<span style=\"color:#21f838\"><small>Installing wm-terminal...</small></span>^5000<br>" +
-            "<span style=\"color:#21f838\"><small>Initializing...</small></span>^3000<br>" +
+        let intro = "<span style=\"color:#21f838\"><small>Installing wm-terminal...</small></span>^3000<br>" +
+            "<span style=\"color:#21f838\"><small>Initializing...</small></span>^2000<br>" +
             "<span style=\"color:#21f838\"><small>Complete!</small></span><br><br>" +
             "<small>INSTRUCTIONS:</small><br><br>" +
             "<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
@@ -269,6 +273,8 @@ function Terminal(element, options) {
     function initTyped(opts) {
         if (window.Typed) {
             new Typed("#typewriter", opts);
+        } else {
+            console.info("Typed is not defined. Try initializing it.");
         }
     }
     
@@ -298,5 +304,5 @@ function Terminal(element, options) {
     }
 }
 
-let t = new Terminal("#commandInput",{});
+//let t = new Terminal("#commandInput",{});
 
