@@ -1,6 +1,7 @@
 'use strict';
 function Terminal(element, options) {
     let _self = this;
+    let _db = null;
     _self.options = options;
     _self.element = element;
     init();
@@ -262,6 +263,8 @@ function Terminal(element, options) {
                 intro = _self.options.intro;
             }
             animateTyping(intro);
+            initFirebase();
+            getRemoteCommands();
         },500)
 
     }
@@ -270,14 +273,6 @@ function Terminal(element, options) {
         /** do help things here*/
     }
 
-    function initTyped(opts) {
-        if (window.Typed) {
-            new Typed("#typewriter", opts);
-        } else {
-            console.info("Typed is not defined. Try initializing it.");
-        }
-    }
-    
     function getIntroFromOptions() {
         let _intro = _self.options.intro;
         if (_intro && _self.options.intro.constructor === Array) {
@@ -302,7 +297,57 @@ function Terminal(element, options) {
         };
         initTyped(options);
     }
-}
 
-//let t = new Terminal("#commandInput",{});
+    /** EXTERNAL STUFF */
+    function initTyped(opts) {
+        if (window.Typed) {
+            new Typed("#typewriter", opts);
+        } else {
+            console.info("Typed is not defined. Try initializing it.");
+        }
+    }
+    function initFirebase() {
+        _db = firebase.firestore();
+        _db.settings({ timestampsInSnapshots: true });
+        if (!firebase.apps.length) {
+            if (_initFirebaseApp()) {
+                // this function already spits out something
+            }
+        } else {
+            console.info("firebase is already initialized");
+        }
+    }
+    function _initFirebaseApp() {
+        const config = {
+            apiKey: "AIzaSyBNHuEildxCzsUGGFXiB4HlcaNMPfV1ASQ",
+            authDomain: "root-terminal.firebaseapp.com",
+            databaseURL: "https://root-terminal.firebaseio.com",
+            projectId: "root-terminal",
+            storageBucket: "",
+            messagingSenderId: "320109607072"
+        };
+        let _app = firebase.initializeApp(config);
+        if (_app.name) {
+            console.log("firebase initialized successfully");
+            return true;
+        }
+        console.log("firebase failed to initialize");
+        return false;
+    }
+    function getRemoteCommands() {
+        let _commandsRef = _db.collection("commands");
+        _commandsRef.get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                _commandsRef = _commandsRef.doc(`${doc.id}`);
+                _commandsRef.get().then((snapshot) => {
+                    if (snapshot.exists) {
+                        let cmd = Array.from(Object.keys(snapshot.data().commands));
+                        console.log(snapshot.data().commands);
+                    }
+                });
+            });
+        });
+    }
+}
+let _terminal = new Terminal("#commandInput",{});
 
