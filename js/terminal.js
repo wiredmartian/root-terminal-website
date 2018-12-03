@@ -91,9 +91,8 @@ function Terminal(element, options) {
             if (_new_input) {
                 _new_input.parentElement.firstElementChild.innerText = _self.options.guest;
                 _new_input.parentElement.firstElementChild.classList.remove('prefix-root');
-                _new_input.innerHTML = "...";
-                _new_input.innerText = "...";
-                _new_input.focus();
+                _new_input.innerHTML = "_";
+                _new_input.innerText = "_";
                 _last_line.after(_new_node);
                 _killElementAfterCloning(_last_line, null);
             }
@@ -154,7 +153,7 @@ function Terminal(element, options) {
     function _getTerminalCommands() {
         let data = (window.commands.length > 0) ? window.commands : [{}];
         let cmd = [];
-        data.forEach((value) => {
+        data.map((value) => {
             cmd.push(Array.from(Object.keys(value)));
         });
         return cmd;
@@ -190,7 +189,7 @@ function Terminal(element, options) {
             "        <div class=\"line\">\n" +
             "            <span class=\"prefix\">guest@user:~# </span>\n" +
             "            <span></span>\n" +
-            "            <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">.</small>\n" +
+            "            <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">_</small>\n" +
             "        </div>\n" +
             "    </div>\n" +
             "</div>";
@@ -205,11 +204,7 @@ function Terminal(element, options) {
         }
     }
     function initializeTyping() {
-        let intro = "<span style=\"color:#21f838\"><small>Installing wm-terminal...</small></span>^3000<br>" +
-            "<span style=\"color:#21f838\"><small>Initializing...</small></span>^2000<br>" +
-            "<span style=\"color:#21f838\"><small>Complete!</small></span><br><br>" +
-            "<small>INSTRUCTIONS:</small><br><br>" +
-            "<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
+        let intro = "<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
             "Use the <span style=\"color:#fffd00\">$ wm help</span> command to view all the available commands. ^1000" +
             "Use <span style=\"color:#fffd00\">$ clear()</span> to clear this message</small>";
 
@@ -284,6 +279,7 @@ function Terminal(element, options) {
                             let key = item[0], val = item[1];
                             return {[key]: val};
                         });
+                        window.commands = _self.options.commands;
                     }
                 });
             });
