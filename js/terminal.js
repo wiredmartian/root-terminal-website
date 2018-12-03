@@ -284,6 +284,7 @@ function Terminal(element, options) {
                             let key = item[0], val = item[1];
                             return {[key]: val};
                         });
+                        window.commands = _self.options.commands;
                     }
                 });
             });

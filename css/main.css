@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   font-family: "Source Code Pro", "Courier New", Courier, monospace;
-  font-size: 1.01em;
   line-height: 30px; }
 
 body {
@@ -52,6 +51,6 @@ footer {
     color: #21f838;
     text-decoration: none; }
     footer a img {
-      flex: 1 auto; }
+      width: 40px;}
 
 /*# sourceMappingURL=main.css.map */

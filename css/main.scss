@@ -2,7 +2,6 @@
   margin: 0;
   padding: 0;
   font-family:"Source Code Pro", "Courier New", Courier, monospace;
-  font-size: 1.01em;
   line-height: 30px;
 }
 body {
@@ -62,7 +61,7 @@ footer {
     text-decoration: none;
 
     img {
-      flex: 1 auto;
+      width: 40px;
     }
   }
 }
