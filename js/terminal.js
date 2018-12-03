@@ -185,11 +185,11 @@ function Terminal(element, options) {
 
     function dragElement(el) {
         el = document.querySelector(el);
-        let _titleblock = document.querySelector("#window-title-bar");
+        let title_block = document.querySelector("#window-title-bar");
 
         let position1 = 0, position2 = 0, position3 = 0, position4 = 0;
-        if (_titleblock) {
-            _titleblock.onmousedown = dragMouseDown;
+        if (title_block) {
+            title_block.onmousedown = dragMouseDown;
         } else {
             el.onmousedown = dragMouseDown;
         }
@@ -323,8 +323,11 @@ function Terminal(element, options) {
                 _commandsRef = _commandsRef.doc(`${doc.id}`);
                 _commandsRef.get().then((snapshot) => {
                     if (snapshot.exists) {
-                        let cmd = Array.from(Object.keys(snapshot.data().commands));
-                        console.log(snapshot.data().commands);
+                        /** override local commands */
+                        _self.options.commands = Object.entries(snapshot.data().commands).map(function (item) {
+                            let key = item[0], val = item[1];
+                            return {[key]: val};
+                        });
                     }
                 });
             });
