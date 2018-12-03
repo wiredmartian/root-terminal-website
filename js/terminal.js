@@ -310,30 +310,12 @@ function Terminal(element, options) {
         _db = firebase.firestore();
         _db.settings({ timestampsInSnapshots: true });
         if (!firebase.apps.length) {
-            if (_initFirebaseApp()) {
-                // this function already spits out something
-            }
+            console.info("firebase is not initialized");
         } else {
             console.info("firebase is already initialized");
         }
     }
-    function _initFirebaseApp() {
-        const config = {
-            apiKey: "AIzaSyBNHuEildxCzsUGGFXiB4HlcaNMPfV1ASQ",
-            authDomain: "root-terminal.firebaseapp.com",
-            databaseURL: "https://root-terminal.firebaseio.com",
-            projectId: "root-terminal",
-            storageBucket: "",
-            messagingSenderId: "320109607072"
-        };
-        let _app = firebase.initializeApp(config);
-        if (_app.name) {
-            console.log("firebase initialized successfully");
-            return true;
-        }
-        console.log("firebase failed to initialize");
-        return false;
-    }
+
     function getRemoteCommands() {
         let _commandsRef = _db.collection("commands");
         _commandsRef.get().then((querySnapshot) => {
