@@ -5,8 +5,7 @@
   line-height: 30px; }
 
 body {
-  background: #262626;
-  overflow: hidden; }
+  background: #262626; }
 
 #terminal-container {
   display: flex;
