@@ -53,3 +53,16 @@ $green-color: #21f838;
 [contenteditable]:focus {
   outline: none;
 }
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  a {
+    color: $green-color;
+    text-decoration: none;
+
+    img {
+      flex: 1 auto;
+    }
+  }
+}

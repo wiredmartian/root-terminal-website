@@ -44,4 +44,14 @@ body {
 [contenteditable]:focus {
   outline: none; }
 
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  footer a {
+    color: #21f838;
+    text-decoration: none; }
+    footer a img {
+      flex: 1 auto; }
+
 /*# sourceMappingURL=main.css.map */

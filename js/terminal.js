@@ -54,7 +54,7 @@ function Terminal(element, options) {
         }
     }
     function _clearTerminal() {
-        let _parent = document.querySelector('.terminal-content');
+        let _parent = document.querySelector('.lines');
         let _lines = Array.from(document.querySelectorAll('.line'));
         _lines.forEach((value, index) => {
             if (_lines.length - 1 !== index) {
@@ -62,6 +62,7 @@ function Terminal(element, options) {
             }
         });
         document.querySelector("#typewriter").classList.add("hidden");
+        document.querySelector("span.typed-cursor").classList.add("hidden");
         _self.element.innerText = "";
         _self.element.innerHTML = "";
     }
@@ -180,15 +181,17 @@ function Terminal(element, options) {
         return result;
     }
 
-    function _loadTerminalHTML(callabck) {
+    function _loadTerminalHTML(callback) {
         // language=HTML
         let _template = "<div class=\"window-title-bar\">root@wiredmartian:~</div>\n" +
             "<div id=\"window\" class=\"terminal\">\n" +
             "    <div class=\"typewriter-container\"><span id=\"typewriter\"></span></div>\n" +
-            "    <div class=\"line\">\n" +
-            "        <span class=\"prefix\">guest@user:~# </span>\n" +
-            "        <span></span>\n" +
-            "        <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">.</small>\n" +
+            "    <div class=\"lines\">\n" +
+            "        <div class=\"line\">\n" +
+            "            <span class=\"prefix\">guest@user:~# </span>\n" +
+            "            <span></span>\n" +
+            "            <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">.</small>\n" +
+            "        </div>\n" +
             "    </div>\n" +
             "</div>";
 
@@ -196,9 +199,9 @@ function Terminal(element, options) {
         if (_container && _checkOutputIsHTML(_template)) {
             _container.innerHTML = _template;
             initializeTyping();
-            callabck(true);
+            callback(true);
         } else {
-            callabck();
+            callback();
         }
     }
     function initializeTyping() {
