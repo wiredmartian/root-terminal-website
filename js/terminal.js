@@ -1,17 +1,18 @@
 'use strict';
 function Terminal(element, options) {
     let _self = this;
+    let _db = null;
     _self.options = options;
     _self.element = element;
-    let _xhttp = new XMLHttpRequest();
-    _loadTerminalHTML(function (res) {
-        if (res) {
-            _defaults();
-            _getOptions(_self.options);
-            dragElement("#terminal-window");
-        }
-    });
-
+    init();
+    function init() {
+        _loadTerminalHTML(function (res) {
+            if (res) {
+                _defaults();
+                _getOptions(_self.options);
+            }
+        });
+    }
     function _defaults() {
         /** HTML Element Selector */
         if (typeof _self.element === "string") {
@@ -24,9 +25,12 @@ function Terminal(element, options) {
                     _htmlElement.focus(); /** auto focus */
                     _self.element.addEventListener("keydown", _handleUserInput);
                 }
+            } else {
+                console.info(`The element ${_self.element} was not found`);
             }
+        } else {
+            console.info(`${_self.element} unexpected element`);
         }
-
     }
     function _handleUserInput(e) {
 
@@ -50,7 +54,7 @@ function Terminal(element, options) {
         }
     }
     function _clearTerminal() {
-        let _parent = document.querySelector('.terminal-content');
+        let _parent = document.querySelector('.lines');
         let _lines = Array.from(document.querySelectorAll('.line'));
         _lines.forEach((value, index) => {
             if (_lines.length - 1 !== index) {
@@ -58,6 +62,7 @@ function Terminal(element, options) {
             }
         });
         document.querySelector("#typewriter").classList.add("hidden");
+        document.querySelector("span.typed-cursor").classList.add("hidden");
         _self.element.innerText = "";
         _self.element.innerHTML = "";
     }
@@ -176,76 +181,32 @@ function Terminal(element, options) {
         return result;
     }
 
-    /** make the terminal draggable */
-
-    function dragElement(el) {
-        el = document.querySelector(el);
-        let _titleblock = document.querySelector("#window-title-bar");
-
-        let position1 = 0, position2 = 0, position3 = 0, position4 = 0;
-        if (_titleblock) {
-            _titleblock.onmousedown = dragMouseDown;
-        } else {
-            el.onmousedown = dragMouseDown;
-        }
-
-        function dragMouseDown(e) {
-            e = e || window.event;
-            e.preventDefault();
-            position3 = e.clientX;
-            position4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
-        }
-
-        function elementDrag(e) {
-            e = e || window.event;
-            e.preventDefault();
-            position1 = position3 - e.clientX;
-            position2 = position4 - e.clientY;
-            position3 = e.clientX;
-            position4 = e.clientY;
-            el.style.top = (el.offsetTop - position2) + "px";
-            el.style.left = (el.offsetLeft - position1) + "px";
-        }
-
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
-    }
-
-    function _loadTerminalHTML(cb) {
+    function _loadTerminalHTML(callback) {
         // language=HTML
-        let _template = "<div class=\"window\">" +
-            "    <div id=\"terminal-window\" class=\"terminal\">" +
-            "        <div id=\"window-title-bar\">root@wiredmartian:~</div>" +
-            "        <div class=\"typewriter-container\"><span id=\"typewriter\"></span></div>" +
-            "        <div class=\"terminal-content\">" +
-            "            <div class=\"line\">" +
-            "                <span class=\"prefix\">guest@user:~# </span>" +
-            "                <span></span>" +
-            "                <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">.</small>" +
-            "            </div>" +
-            "        </div>" +
-            "        <div class=\"clearfix\"></div>" +
-            "    </div>" +
+        let _template = "<div class=\"window-title-bar\">root@wiredmartian:~</div>\n" +
+            "<div id=\"window\" class=\"terminal\">\n" +
+            "    <div class=\"typewriter-container\"><span id=\"typewriter\"></span></div>\n" +
+            "    <div class=\"lines\">\n" +
+            "        <div class=\"line\">\n" +
+            "            <span class=\"prefix\">guest@user:~# </span>\n" +
+            "            <span></span>\n" +
+            "            <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">.</small>\n" +
+            "        </div>\n" +
+            "    </div>\n" +
             "</div>";
 
         let _container = document.querySelector("#terminal-container");
         if (_container && _checkOutputIsHTML(_template)) {
             _container.innerHTML = _template;
             initializeTyping();
-            cb(true);
+            callback(true);
         } else {
-            cb()
+            callback();
         }
-
-
     }
     function initializeTyping() {
-        let intro = "<span style=\"color:#21f838\"><small>Installing wm-terminal...</small></span>^5000<br>" +
-            "<span style=\"color:#21f838\"><small>Initializing...</small></span>^3000<br>" +
+        let intro = "<span style=\"color:#21f838\"><small>Installing wm-terminal...</small></span>^3000<br>" +
+            "<span style=\"color:#21f838\"><small>Initializing...</small></span>^2000<br>" +
             "<span style=\"color:#21f838\"><small>Complete!</small></span><br><br>" +
             "<small>INSTRUCTIONS:</small><br><br>" +
             "<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
@@ -258,6 +219,8 @@ function Terminal(element, options) {
                 intro = _self.options.intro;
             }
             animateTyping(intro);
+            initFirebase();
+            getRemoteCommands();
         },500)
 
     }
@@ -266,12 +229,6 @@ function Terminal(element, options) {
         /** do help things here*/
     }
 
-    function initTyped(opts) {
-        if (window.Typed) {
-            new Typed("#typewriter", opts);
-        }
-    }
-    
     function getIntroFromOptions() {
         let _intro = _self.options.intro;
         if (_intro && _self.options.intro.constructor === Array) {
@@ -296,7 +253,42 @@ function Terminal(element, options) {
         };
         initTyped(options);
     }
-}
 
-let t = new Terminal("#commandInput",{});
+    /** EXTERNAL STUFF */
+    function initTyped(opts) {
+        if (window.Typed) {
+            new Typed("#typewriter", opts);
+        } else {
+            console.info("Typed is not defined. Try initializing it.");
+        }
+    }
+    function initFirebase() {
+        _db = firebase.firestore();
+        _db.settings({ timestampsInSnapshots: true });
+        if (!firebase.apps.length) {
+            console.info("firebase is not initialized");
+        } else {
+            console.info("firebase is already initialized");
+        }
+    }
+
+    function getRemoteCommands() {
+        let _commandsRef = _db.collection("commands");
+        _commandsRef.get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                _commandsRef = _commandsRef.doc(`${doc.id}`);
+                _commandsRef.get().then((snapshot) => {
+                    if (snapshot.exists) {
+                        /** override local commands */
+                        _self.options.commands = Object.entries(snapshot.data().commands).map(function (item) {
+                            let key = item[0], val = item[1];
+                            return {[key]: val};
+                        });
+                    }
+                });
+            });
+        });
+    }
+}
+let _terminal = new Terminal("#commandInput",{});
 
