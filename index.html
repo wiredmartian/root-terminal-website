@@ -2,37 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>terminal.js | wiredmartian.co.za</title>
-    <link rel="stylesheet" href="css/main.css" />
+    <title>wiredmartian.co.za</title>
+
+    <link rel="stylesheet" href="dist/main.css">
 </head>
 <body>
     <div class="container">
         <div id="terminal-container"></div>
         <footer>
-            <!--<a href="#"><img alt="" src="_public/Github.png" /></a>
-            <a href="#"><img alt="" src="_public/Instagram.png" /></a>
-            <a href="#"><img alt="" src="_public/Twitter.png"/></a>
-            <a href="#"><img alt="" src="_public/Linkedin.png"/></a>-->
         </footer>
     </div>
-
-    <script src="external/typed.2.0.0.js"></script>
-    <!-- uncomment this line if you wanna use local commands -->
-    <!--<script src="js/data.js"></script>-->
-    <script src="js/terminal.js"></script>
-    <script src="external/firebase.5.6.0.js"></script>
-    <script src="external/firebase-app.5.6.0.js"></script>
-    <script>
-        const config = {
-            apiKey: "AIzaSyBNHuEildxCzsUGGFXiB4HlcaNMPfV1ASQ",
-            authDomain: "root-terminal.firebaseapp.com",
-            databaseURL: "https://root-terminal.firebaseio.com",
-            projectId: "root-terminal",
-            storageBucket: "",
-            messagingSenderId: "320109607072"
-        };
-        firebase.initializeApp(config);
-    </script>
-    <script src="external/firebase.5.6.0.firestore.js"></script>
+    <script src="dist/bundle.js"></script>
 </body>
 </html>
