@@ -1,27 +1,22 @@
 import { firebaseconfig } from "./firebase.config";
+import { terminalcommands } from "./data";
 import Typed from 'typed.js';
 import firebase from 'firebase';
 import '../css/main.scss'
+let _db;
 
-
-function initFirebase() {
-    firebase.initializeApp(firebaseconfig);
-}
-initFirebase();
 function Terminal(element, options) {
     let _self = this;
-    let _db = firebase.firestore();
     _self.options = options;
     _self.element = element;
-    init();
-    function init() {
-        _loadTerminalHTML(function (res) {
+    (function() {
+        _loadTerminalHTML((res) => {
             if (res) {
                 _defaults();
                 _getOptions(_self.options);
             }
         });
-    }
+    })();
     function _defaults() {
         /** HTML Element Selector */
         if (typeof _self.element === "string") {
@@ -42,14 +37,12 @@ function Terminal(element, options) {
         }
     }
     function _handleUserInput(e) {
-
         if (e.key === "Enter" && e.which === 13 && !e.shiftKey) {
             e.preventDefault();
             let input = "";
             if (e.innerHTML === e.innerText) {
                 input = _self.element.innerText;
             }
-
 
             if (typeof input !== "undefined" && input != null && input !== "") {
                 /** is input a clear()? */
@@ -93,7 +86,7 @@ function Terminal(element, options) {
         }
         last_el.after(new_node);
 
-        _killElementAfterCloning(last_el, function(){
+        _killElementAfterCloning(last_el, () => {
             let _last_line = _getLastLineElement();
             let _new_node = _last_line.cloneNode(true);
             let _new_input = _new_node.querySelector('#commandInput');
@@ -107,8 +100,7 @@ function Terminal(element, options) {
             }
             _self.element = _new_input;
             _attachEventToNewInputElement(_new_input)
-        })
-
+        });
     }
 
     function _getLastLineElement() {
@@ -116,7 +108,7 @@ function Terminal(element, options) {
         return lines[lines.length - 1];
     }
 
-    function _killElementAfterCloning(el, cb) {
+    function _killElementAfterCloning(el, callback) {
         let old_el = el.querySelector('#commandInput');
         if (old_el) {
             /** detach event listener */
@@ -125,7 +117,7 @@ function Terminal(element, options) {
             old_el.removeAttribute("id");
             old_el.disabled = true;
         }
-        if (cb) { cb(); }
+        if (callback) { callback(); }
     }
     function _detachEventOnElement(el) {
         el.removeEventListener("keydown", _handleUserInput, false);
@@ -135,19 +127,22 @@ function Terminal(element, options) {
     }
 
     function _getOptions(opts) {
-        let _cmds = _self.options.commands;
-        if (_cmds && _self.options.commands.constructor === Array) { // Array of objects
-            window.commands = _cmds;
-        }
         let options = new Object({
-            root: "root@user:~#",
+            root: "wiredmartian@user:~#",
             guest: "guest@user:~#",
             intro: "",
+            source: "local", // remote or local
             prefix: "wm",
-            commands: window.commands
+            commands: [{ os: "Linux"}]
         });
         Object.assign(options, opts);
         _self.options = options;
+        /** no commands passed */
+        if (!opts.commands) {
+            if (opts.source) {
+                _getDataSource();
+            }
+        }
     }
 
     function _isPrefixValid(prefix) {
@@ -160,19 +155,17 @@ function Terminal(element, options) {
     }
 
     function _getTerminalCommands() {
-        let data = (window.commands.length > 0) ? window.commands : [{}];
         let cmd = [];
-        data.map((value) => {
+        _self.options.commands.map((value) => {
             cmd.push(Array.from(Object.keys(value)));
         });
         return cmd;
     }
-    function _processTerminalInput(input = "dob") {
+    function _processTerminalInput(input) {
         let arr = _getTerminalCommands();
         let result = "";
         if (arr.length !== 0 && typeof(input) !== 'undefined') {
             result =`\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`;
-
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {
                 return result;
@@ -181,7 +174,7 @@ function Terminal(element, options) {
             }
             for (let index in arr) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
-                    result = Object.values(window.commands[index])[0];
+                    result = Object.values(_self.options.commands[index])[0];
                     break;
                 }
             }
@@ -218,15 +211,10 @@ function Terminal(element, options) {
             "Use <span style=\"color:#fffd00\">$ clear()</span> to clear this message</small>";
 
         /** wait for options init before running typed.js */
-        setTimeout(function () {
-            if (typeof (_self.options.intro) !== "undefined" && _self.options.intro !== "") {
-                intro = _self.options.intro;
-            }
-            animateTyping(intro);
-            initFirebase();
-            getRemoteCommands();
-        },500)
-
+        if (typeof (_self.options.intro) !== "undefined" && _self.options.intro !== "") {
+            intro = _self.options.intro;
+        }
+        animateTyping(intro);
     }
 
     function help() {
@@ -257,12 +245,12 @@ function Terminal(element, options) {
         };
         initTyped(options);
     }
-
-    /** EXTERNAL STUFF */
     function initTyped(opts) {
         new Typed("#typewriter", opts);
     }
-    function initFirebase() {
+    function _initFirebase () {
+        firebase.initializeApp(firebaseconfig);
+        _db = firebase.firestore();
         _db.settings({ timestampsInSnapshots: true });
         if (!firebase.apps.length) {
             console.info("firebase is not initialized");
@@ -270,25 +258,41 @@ function Terminal(element, options) {
             console.info("firebase is already initialized");
         }
     }
-
     function getRemoteCommands() {
         let _commandsRef = _db.collection("commands");
         _commandsRef.get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-                _commandsRef = _commandsRef.doc(`${doc.id}`);
-                _commandsRef.get().then((snapshot) => {
+                _commandsRef.doc(`${doc.id}`).get().then((snapshot) => {
                     if (snapshot.exists) {
-                        /** override local commands */
-                        _self.options.commands = Object.entries(snapshot.data().commands).map(function (item) {
+                        _self.options.commands = Object.entries(snapshot.data().commands).map((item) => {
                             let key = item[0], val = item[1];
                             return {[key]: val};
                         });
-                        window.commands = _self.options.commands;
+                        console.info(_self.options.commands);
                     }
                 });
             });
         });
     }
+    function _getDataSource() {
+        let source = _self.options.source;
+        /** no source specified */
+        if (source) {
+            switch (source) {
+                case "local" :
+                    _self.options.commands = terminalcommands;
+                    console.info(_self.options.commands);
+                    break;
+                case "remote" :
+                    _initFirebase();
+                    getRemoteCommands();
+                    break;
+                default:
+                    _self.options.commands = terminalcommands;
+            }
+        } else {
+            console.info("no data source specified");
+        }
+    }
 }
-let _terminal = new Terminal("#commandInput",{});
-
+new Terminal("#commandInput", {});
