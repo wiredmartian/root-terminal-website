@@ -5,29 +5,18 @@ import firebase from 'firebase';
 import '../css/main.scss'
 let _db;
 
-(function() {
-    firebase.initializeApp(firebaseconfig);
-    _db = firebase.firestore();
-    _db.settings({ timestampsInSnapshots: true });
-    if (!firebase.apps.length) {
-        console.info("firebase is not initialized");
-    } else {
-        console.info("firebase is already initialized");
-    }
-})();
 function Terminal(element, options) {
     let _self = this;
     _self.options = options;
     _self.element = element;
-    init();
-    function init() {
+    (function() {
         _loadTerminalHTML((res) => {
             if (res) {
                 _defaults();
                 _getOptions(_self.options);
             }
         });
-    }
+    })();
     function _defaults() {
         /** HTML Element Selector */
         if (typeof _self.element === "string") {
@@ -256,12 +245,19 @@ function Terminal(element, options) {
         };
         initTyped(options);
     }
-
-    /** EXTERNAL STUFF */
     function initTyped(opts) {
         new Typed("#typewriter", opts);
     }
-
+    function _initFirebase () {
+        firebase.initializeApp(firebaseconfig);
+        _db = firebase.firestore();
+        _db.settings({ timestampsInSnapshots: true });
+        if (!firebase.apps.length) {
+            console.info("firebase is not initialized");
+        } else {
+            console.info("firebase is already initialized");
+        }
+    }
     function getRemoteCommands() {
         let _commandsRef = _db.collection("commands");
         _commandsRef.get().then((querySnapshot) => {
@@ -288,6 +284,7 @@ function Terminal(element, options) {
                     console.info(_self.options.commands);
                     break;
                 case "remote" :
+                    _initFirebase();
                     getRemoteCommands();
                     break;
                 default:
