@@ -233,14 +233,14 @@ function Terminal(element, options) {
         if (_intro) {
             intro = _intro;
         } else {
-            intro = Array.from(intro.split(",")); // Touch ye NOT, this piece of code. What??
+            intro = Array.from(intro); // Touch ye NOT, this piece of code. What??
         }
 
         let options = {
             strings: intro,
             startDelay: 1000,
-            typeSpeed: 40,
-            backSpeed: 10,
+            typeSpeed: 50,
+            backSpeed: 20,
             cursorChar: '_'
         };
         initTyped(options);
@@ -295,4 +295,21 @@ function Terminal(element, options) {
         }
     }
 }
-new Terminal("#commandInput", {});
+new Terminal("#commandInput", {
+    intro:[
+        "<h1>Hello 👋 </h1>^800" +
+        "My name is <b>Solomzi Jikani</b> aka the wiredmartian.<br>^800" +
+        "I'm a <b>web developer</b> based in Durban, originally from Port St Johns.<br>^800" +
+        "I build <b>web apps</b> using <span class='prefix-root'>JavaScript, Angular 2+, .NET</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
+        "I have experience on <span class='prefix-root'>NativeScript </span> and <span class='prefix-root'>Ionic</span> for building <b>hybrid mobile apps</b>.<br>^800" +
+        "I'm currently employed as a <b>front-end developer</b>. But my contacts are below for any enquiry.<br>^800<br>" +
+        "<h2>Contacts:</h2>" +
+        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong><br>" +
+        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>Github</a>" +
+        "<a class='contact-link' href='#' target='_blank'>Blog</a>" +
+        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>Twitter</a>" +
+        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>Instagram</a>" +
+        "<a class='contact-link' href='https://www.linkedin.com/in/solomzi-jikani' target='_blank'>LinkedIn</a>"
+    ],
+    source: "remote"
+});
