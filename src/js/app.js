@@ -45,12 +45,17 @@ function Terminal(element, options) {
             }
 
             if (typeof input !== "undefined" && input != null && input !== "") {
+                let response;
                 /** is input a clear()? */
-                if (input.toLowerCase() === "clear" || input.toLowerCase() === "clear()") {
+                input = input.toLocaleLowerCase();
+                if (input === "clear" || input === "clear()") {
                     _clearTerminal();
                     return;
+                } else if (input === "help") {
+                    response = help();
+                } else {
+                    response = _processTerminalInput(input)
                 }
-                let response = _processTerminalInput(input);
                 createNewLine(response);
             }
         }
@@ -71,7 +76,6 @@ function Terminal(element, options) {
     function _checkOutputIsHTML(output) {
         return /<[a-z][\s\S]*>/.test(output);
     }
-
 
     function createNewLine(res) {
         let last_el = _getLastLineElement(); // get last element
@@ -184,14 +188,14 @@ function Terminal(element, options) {
 
     function _loadTerminalHTML(callback) {
         // language=HTML
-        let _template = "<div class=\"window-title-bar\">root@wiredmartian:~</div>\n" +
-            "<div id=\"window\" class=\"terminal\">\n" +
-            "    <div class=\"typewriter-container\"><span id=\"typewriter\"></span></div>\n" +
-            "    <div class=\"lines\">\n" +
-            "        <div class=\"line\">\n" +
-            "            <span class=\"prefix\">guest@user:~# </span>\n" +
+        let _template = "<div class='window-title-bar'>root@wiredmartian:~</div>\n" +
+            "<div id='window' class='terminal'>\n" +
+            "    <div class='typewriter-container'><span id='typewriter'></span></div>\n" +
+            "    <div class='lines'>\n" +
+            "        <div class='line'>\n" +
+            "            <span class='prefix'>guest@user:~# </span>\n" +
             "            <span></span>\n" +
-            "            <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">_</small>\n" +
+            "            <small id='commandInput' class='caret' contenteditable='true' spellcheck='false'>_</small>\n" +
             "        </div>\n" +
             "    </div>\n" +
             "</div>";
@@ -207,8 +211,8 @@ function Terminal(element, options) {
     }
     function initializeTyping() {
         let intro = "<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
-            "Use the <span style=\"color:#fffd00\">$ wm help</span> command to view all the available commands. ^1000" +
-            "Use <span style=\"color:#fffd00\">$ clear()</span> to clear this message</small>";
+            "Use the <span class='prefix-root'>$ help</span> command to view all the available commands. ^1000" +
+            "Use <span class='prefix-root'>$ clear()</span> to clear this message</small>";
 
         /** wait for options init before running typed.js */
         if (typeof (_self.options.intro) !== "undefined" && _self.options.intro !== "") {
@@ -219,6 +223,14 @@ function Terminal(element, options) {
 
     function help() {
         /** do help things here*/
+        let html = "<br><strong>Use the commands below to query info: </strong><br>";
+        const prefix = _self.options.prefix;
+        Array.from(_self.options.commands).map(item => {
+            let _key = Object.keys(item);
+            html += `<span class="prefix-root">${ prefix +' '+ _key }</span><br>`;
+        });
+        html += "<strong>To clear the terminal, use <b>clear</b></strong>";
+        return html;
     }
 
     function getIntroFromOptions() {
@@ -298,10 +310,10 @@ function Terminal(element, options) {
 new Terminal("#commandInput", {
     intro:[
         "<h1>Hello 👋 </h1>^800" +
-        "My name is <b>Solomzi Jikani</b> aka the wiredmartian.<br>^800" +
+        "My name is <b>Solomzi Jikani</b> aka the <span class='prefix-root'>wiredmartian</span>.<br>^800" +
         "I'm a <b>web developer</b> based in Durban, originally from Port St Johns.<br>^800" +
         "I build <b>web apps</b> using <span class='prefix-root'>JavaScript, Angular 2+, .NET</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
-        "I have experience on <span class='prefix-root'>NativeScript </span> and <span class='prefix-root'>Ionic</span> for building <b>hybrid mobile apps</b>.<br>^800" +
+        "I have some experience with <span class='prefix-root'>NativeScript </span> and <span class='prefix-root'>Ionic</span> for building <b>hybrid mobile apps</b>.<br>^800" +
         "I'm currently employed as a <b>front-end developer</b>. But my contacts are below for any enquiry.<br>^800<br>" +
         "<h2>Contacts:</h2>" +
         "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong><br>" +
