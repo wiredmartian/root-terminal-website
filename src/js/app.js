@@ -174,7 +174,15 @@ function Terminal(element, options) {
             if (!_isPrefixValid(_prefix)) {
                 return result;
             } else {
-                input = input.split(" ")[1].toString().trim();
+                /** no keyword used after prefix */
+                input = input.split(" ");
+                if (input[1]) {
+                    /** check command after the prefix is valid */
+                    input = input[1].toString().trim()
+                } else {
+                    result = help();
+                    return result;
+                }
             }
             for (let index in arr) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
