@@ -41,7 +41,7 @@ body {
   padding: 0 6px;
 }
 #terminal-container #window .line #commandInput::before {
-  content: "...";
+  content: "... ";
 }
 #terminal-container #window .line #commandInput.active::before {
   content: "";

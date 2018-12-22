@@ -29,6 +29,7 @@ function Terminal(element, options) {
                     _htmlElement.focus(); /** auto focus */
                     _self.element.addEventListener("keydown", _handleUserInput);
                     _activateInput();
+                    _onInputBlur();
                 }
             } else {
                 console.info(`The element ${_self.element} was not found`);
@@ -84,13 +85,19 @@ function Terminal(element, options) {
     function createNewLine(res) {
         let last_el = _getLastLineElement(); // get last element
         let new_node = last_el.cloneNode(true); //clone last element
-        let new_input = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
-        if (new_input) {
+
+        /** element to handle root response from user input */
+        let response_el = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
+        if (response_el) {
             /** TODO: this line is too much dependent on the DOM */
-            new_input.parentElement.firstElementChild.innerText = _self.options.root; // set its innerhtml to root (root@user)
-            new_input.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
-            new_input.innerHTML = res;
-            /*new_input.innerText = res;*/
+            response_el.parentElement.firstElementChild.innerText = _self.options.root; // set its innerhtml to root (root@user)
+            response_el.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
+
+            if (_checkOutputIsHTML(res)) {
+                response_el.innerHTML = res;
+            } else {
+                response_el.innerText = res;
+            }
         }
         last_el.after(new_node);
 
@@ -109,6 +116,7 @@ function Terminal(element, options) {
             _self.element = _new_input;
             _attachEventToNewInputElement(_new_input);
             _activateInput();
+            _onInputBlur();
         });
     }
 
@@ -300,6 +308,11 @@ function Terminal(element, options) {
     }
     function _deactivateInput() {
         _self.element.classList.remove('active');
+    }
+    function _onInputBlur() {
+        _self.element.addEventListener('blur', function () {
+            _self.element.classList.remove('active');
+        });
     }
     function _getDataSource() {
         let source = _self.options.source;

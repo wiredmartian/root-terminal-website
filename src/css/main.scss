@@ -38,7 +38,7 @@ $green-color: #21f838;
         padding:0 6px;
       }
       #commandInput::before {
-        content: '...';
+        content: '... ';
       }
       #commandInput.active::before {
         content: '';
