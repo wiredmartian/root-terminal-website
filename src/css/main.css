@@ -34,8 +34,17 @@ body {
   margin: 15px auto;
 }
 #terminal-container #window .line #commandInput {
-  width: 5px;
-  height: 14px;
+  width: 1px;
+  height: 1px;
+  border: none;
+  margin: 0;
+  padding: 0 6px;
+}
+#terminal-container #window .line #commandInput::before {
+  content: "...";
+}
+#terminal-container #window .line #commandInput.active::before {
+  content: "";
 }
 #terminal-container #window .prefix {
   color: #21f838;

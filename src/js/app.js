@@ -28,6 +28,7 @@ function Terminal(element, options) {
                     /** attach listener on Enter */
                     _htmlElement.focus(); /** auto focus */
                     _self.element.addEventListener("keydown", _handleUserInput);
+                    _activateInput();
                 }
             } else {
                 console.info(`The element ${_self.element} was not found`);
@@ -56,7 +57,10 @@ function Terminal(element, options) {
                 } else {
                     response = _processTerminalInput(input)
                 }
+                _deactivateInput();
                 createNewLine(response);
+            } else {
+                console.error('You have entered an invalid input');
             }
         }
     }
@@ -97,13 +101,14 @@ function Terminal(element, options) {
             if (_new_input) {
                 _new_input.parentElement.firstElementChild.innerText = _self.options.guest;
                 _new_input.parentElement.firstElementChild.classList.remove('prefix-root');
-                _new_input.innerHTML = "_";
-                _new_input.innerText = "_";
+                _new_input.innerHTML = "";
+                _new_input.innerText = "";
                 _last_line.after(_new_node);
                 _killElementAfterCloning(_last_line, null);
             }
             _self.element = _new_input;
-            _attachEventToNewInputElement(_new_input)
+            _attachEventToNewInputElement(_new_input);
+            _activateInput();
         });
     }
 
@@ -132,8 +137,8 @@ function Terminal(element, options) {
 
     function _getOptions(opts) {
         let options = new Object({
-            root: "wiredmartian@user:~#",
-            guest: "guest@user:~#",
+            root: "wiredmartian@user:~ $",
+            guest: "guest@user:~ $",
             intro: "",
             source: "local", // remote or local
             prefix: "wm",
@@ -148,16 +153,13 @@ function Terminal(element, options) {
             }
         }
     }
-
     function _isPrefixValid(prefix) {
         let _prefix = prefix.toString().toLowerCase().trim();
         return (_prefix === _self.options.prefix);
     }
-
     function _getPrefixFromInput(input) {
         return input.toString().trim().split(" ")[0].trim();
     }
-
     function _getTerminalCommands() {
         let cmd = [];
         _self.options.commands.map((value) => {
@@ -193,17 +195,16 @@ function Terminal(element, options) {
         }
         return result;
     }
-
     function _loadTerminalHTML(callback) {
         // language=HTML
-        let _template = "<div class='window-title-bar'>root@wiredmartian:~</div>\n" +
+        let _template = "<div class='window-title-bar'>root@wiredmartian:~ $</div>\n" +
             "<div id='window' class='terminal'>\n" +
             "    <div class='typewriter-container'><span id='typewriter'></span></div>\n" +
             "    <div class='lines'>\n" +
             "        <div class='line'>\n" +
-            "            <span class='prefix'>guest@user:~# </span>\n" +
+            "            <span class='prefix'>guest@user:~ $ </span>\n" +
             "            <span></span>\n" +
-            "            <small id='commandInput' class='caret' contenteditable='true' spellcheck='false'>_</small>\n" +
+            "            <small id='commandInput' class='caret' contenteditable='true' spellcheck='false'></small>\n" +
             "        </div>\n" +
             "    </div>\n" +
             "</div>";
@@ -228,7 +229,6 @@ function Terminal(element, options) {
         }
         animateTyping(intro);
     }
-
     function help() {
         /** do help things here*/
         let html = "<br><strong>Use the commands below to query info: </strong><br>";
@@ -240,7 +240,6 @@ function Terminal(element, options) {
         html += "<strong>To clear the terminal, use <b>clear</b></strong>";
         return html;
     }
-
     function getIntroFromOptions() {
         let _intro = _self.options.intro;
         if (_intro && _self.options.intro.constructor === Array) {
@@ -294,6 +293,14 @@ function Terminal(element, options) {
             });
         });
     }
+    function _activateInput() {
+        _self.element.addEventListener('click', function () {
+            _self.element.classList.add('active');
+        });
+    }
+    function _deactivateInput() {
+        _self.element.classList.remove('active');
+    }
     function _getDataSource() {
         let source = _self.options.source;
         /** no source specified */
@@ -325,11 +332,11 @@ new Terminal("#commandInput", {
         "I'm currently employed as a <b>front-end developer</b>. But my contacts are below for any enquiry.<br>^800<br>" +
         "<h2>Contacts:</h2>" +
         "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong><br>" +
-        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>Github</a>" +
-        "<a class='contact-link' href='#' target='_blank'>Blog</a>" +
-        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>Twitter</a>" +
-        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>Instagram</a>" +
-        "<a class='contact-link' href='https://www.linkedin.com/in/solomzi-jikani' target='_blank'>LinkedIn</a>"
+        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>github</a>" +
+        "<a class='contact-link' href='#' target='_blank'>blog</a>" +
+        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>twitter</a>" +
+        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>instagram</a>" +
+        "<a class='contact-link' href='https://www.linkedin.com/in/solomzi-jikani' target='_blank'>linkedIn</a>"
     ],
     source: "remote"
 });

@@ -31,8 +31,17 @@ $green-color: #21f838;
       min-height: 15px;
       margin: 15px auto;
       #commandInput {
-        width: 5px;
-        height: 14px;
+        width: 1px;
+        height: 1px;
+        border: none;
+        margin: 0;
+        padding:0 6px;
+      }
+      #commandInput::before {
+        content: '...';
+      }
+      #commandInput.active::before {
+        content: '';
       }
     }
     .prefix {
