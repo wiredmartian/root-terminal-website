@@ -1,7 +1,8 @@
 import { firebaseconfig } from "./firebase.config";
 import { terminalcommands } from "./data";
 import Typed from 'typed.js';
-import firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 import '../css/main.scss'
 let _db;
 
@@ -295,7 +296,6 @@ function Terminal(element, options) {
                             let key = item[0], val = item[1];
                             return {[key]: val};
                         });
-                        console.info(_self.options.commands);
                     }
                 });
             });
