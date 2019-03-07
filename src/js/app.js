@@ -4,7 +4,7 @@ import Typed from 'typed.js';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 import '../css/main.scss'
-let _db;
+let _db, _storage;
 
 function Terminal(element, options) {
     let _self = this;
@@ -84,6 +84,7 @@ function Terminal(element, options) {
     }
 
     function createNewLine(res) {
+        console.log(typeof(res));
         let last_el = _getLastLineElement(); // get last element
         let new_node = last_el.cloneNode(true); //clone last element
 
@@ -94,11 +95,18 @@ function Terminal(element, options) {
             response_el.parentElement.firstElementChild.innerText = _self.options.root; // set its innerhtml to root (root@user)
             response_el.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
 
-            if (_checkOutputIsHTML(res)) {
-                response_el.innerHTML = res;
+            if (typeof(res) !== 'string') {
+                res.then(function(url) {
+                    response_el.innerHTML = url;
+                });
             } else {
-                response_el.innerText = res;
+                if (_checkOutputIsHTML(res)) {
+                    response_el.innerHTML = res;
+                } else {
+                    response_el.innerText = res;
+                }
             }
+            pageScroll();
         }
         last_el.after(new_node);
 
@@ -179,11 +187,13 @@ function Terminal(element, options) {
     function _processTerminalInput(input) {
         let arr = _getTerminalCommands();
         let result = "";
+        let pendingGifPromise = getPanicGif();
         if (arr.length !== 0 && typeof(input) !== 'undefined') {
-            result =`\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`;
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {
-                return result;
+                return pendingGifPromise.then(function(img) {
+                    return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
+                });
             } else {
                 /** no keyword used after prefix */
                 input = input.split(" ");
@@ -202,11 +212,18 @@ function Terminal(element, options) {
                 }
             }
         }
-        return result;
+        if (!result) {
+            // `\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`
+            return pendingGifPromise.then(function(img) {
+                return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
+            });
+        } else {
+            return result;
+        }
     }
     function _loadTerminalHTML(callback) {
         // language=HTML
-        let _template = "<div class='window-title-bar'>root@wiredmartian:~ $</div>\n" +
+        let _template = "<div class='window-title-bar'>wiredmartian:~ $</div>\n" +
             "<div id='window' class='terminal'>\n" +
             "    <div class='typewriter-container'><span id='typewriter'></span></div>\n" +
             "    <div class='lines'>\n" +
@@ -279,12 +296,11 @@ function Terminal(element, options) {
     function _initFirebase () {
         firebase.initializeApp(firebaseconfig);
         _db = firebase.firestore();
+        _storage = firebase.storage();
         _db.settings({ timestampsInSnapshots: true });
         if (!firebase.apps.length) {
             console.info("firebase is not initialized");
-        } else {
-            console.info("firebase is already initialized");
-        }
+        } 
     }
     function getRemoteCommands() {
         let _commandsRef = _db.collection("commands");
@@ -334,22 +350,43 @@ function Terminal(element, options) {
             console.info("no data source specified");
         }
     }
+    function _getRandomInt(maxnumber) {
+        return Math.floor(Math.random() * Math.floor(maxnumber));
+    }
+     function getPanicGif() {
+        let gif = _getRandomInt(10) + '.gif';
+        return _storage.ref('panic/' + gif).getDownloadURL()
+        .then(function(url) {
+            return url
+        }).catch(function(err) {
+            return '';
+        });
+    }
+    function pageScroll() {
+        window.scrollBy(0,1);
+        let scrollDelay = setTimeout(pageScroll,10)
+        window.onmousewheel = function () {
+            clearTimeout(scrollDelay);    
+        };
+        
+    }
 }
 new Terminal("#commandInput", {
     intro:[
         "<h1>Hello 👋 </h1>^800" +
-        "My name is <b>Solomzi Jikani</b> aka the <span class='prefix-root'>wiredmartian</span>.<br>^800" +
+        "My name is <b>Solomzi Jikani</b> aka the <span class='prefix-root'>Wired Martian</span>.<br>^800" +
         "I'm a <b>web developer</b> based in Durban, originally from Port St Johns.<br>^800" +
         "I build <b>web apps</b> using <span class='prefix-root'>JavaScript, Angular 2+, .NET</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
-        "I have some experience with <span class='prefix-root'>NativeScript </span> and <span class='prefix-root'>Ionic</span> for building <b>hybrid mobile apps</b>.<br>^800" +
-        "I'm currently employed as a <b>front-end developer</b>. But my contacts are below for any enquiry.<br>^800<br>" +
+        "I have some experience with <span class='prefix-root'>NativeScript </span> and <span class='prefix-root'>Ionic</span> for building <b>hybrid mobile apps</b>.<br>^600" +
+        "<b><a target='_blank' href='https://drive.google.com/file/d/12p_aFwSiqziIQIJYyxuThod76kpXa_6g/view?usp=sharing'>Download my full resume </a></b> for more information about myself.<br>^800<br>" +
         "<h2>Contacts:</h2>" +
-        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong><br>" +
+        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong> | <strong> madcoder@wiredmartian.co.za</strong><br>" +
         "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>github</a>" +
         "<a class='contact-link' href='#' target='_blank'>blog</a>" +
         "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>twitter</a>" +
         "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>instagram</a>" +
-        "<a class='contact-link' href='https://www.linkedin.com/in/solomzi-jikani' target='_blank'>linkedIn</a>"
+        "<a class='contact-link' href='https://www.youtube.com/channel/UCxMBdiwRylKoT_KUstcgsNg/videos' target='_blank'>YouTube</a><br><br>^800" +
+        "Click on 'start typing..' and type 'wm' to see all the commands you can execute 😊"
     ],
     source: "remote"
 });

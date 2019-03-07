@@ -2,8 +2,8 @@
   margin: 0;
   padding: 0;
   font-family:"Source Code Pro", "Courier New", Courier, monospace;
-  line-height: 30px;
-  font-size: 14px;
+  line-height: 32px;
+  font-size: 16px;
 }
 body {
   background: rgb(38, 38, 38);
@@ -36,12 +36,16 @@ $green-color: #21f838;
         border: none;
         margin: 0;
         padding:0 6px;
+        cursor: text;
       }
       #commandInput::before {
-        content: '... ';
+        content: 'start typing... ';
       }
       #commandInput.active::before {
         content: '';
+      }
+      ul {
+        padding-left: 30px;
       }
     }
     .prefix {
@@ -75,16 +79,21 @@ $green-color: #21f838;
 [contenteditable]:focus {
   outline: none;
 }
-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  a {
-    color: $green-color;
-    text-decoration: none;
-
-    img {
-      width: 40px;
-    }
+a {
+  color: $green-color;
+  text-decoration: none;
+}
+.git-image {
+  width: 30%;
+  height: auto;
+}
+@media (max-width: 768px) {
+  .git-image {
+    width: 60%;
+  }
+}
+@media (max-width: 425px) {
+  .git-image {
+    width: 100%;
   }
 }
