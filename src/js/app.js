@@ -1,4 +1,3 @@
-import { firebaseconfig } from "./firebase.config";
 import { terminalcommands } from "./data";
 import Typed from 'typed.js';
 import '../css/main.scss'
