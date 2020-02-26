@@ -1,6 +1,16 @@
 # webstorm config
 .idea/
 
+# node_modules
+
+# dist folder
+dist/
+
+# github
+.github/
+
+# firebase config
+src/firebase.config.js
 #node_modules
 node_modules/
 

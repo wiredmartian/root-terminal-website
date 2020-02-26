@@ -1,9 +1,6 @@
-import { firebaseconfig } from "./firebase.config";
 import { terminalcommands } from "./data";
 import Typed from 'typed.js';
-import firebase from 'firebase';
 import '../css/main.scss'
-let _db;
 
 function Terminal(element, options) {
     let _self = this;
@@ -28,12 +25,14 @@ function Terminal(element, options) {
                     /** attach listener on Enter */
                     _htmlElement.focus(); /** auto focus */
                     _self.element.addEventListener("keydown", _handleUserInput);
+                    _activateInput();
+                    _onInputBlur();
                 }
             } else {
-                console.info(`The element ${_self.element} was not found`);
+                console.error(`The element ${_self.element} was not found`);
             }
         } else {
-            console.info(`${_self.element} unexpected element`);
+            console.error(`${_self.element} unexpected element`);
         }
     }
     function _handleUserInput(e) {
@@ -45,13 +44,21 @@ function Terminal(element, options) {
             }
 
             if (typeof input !== "undefined" && input != null && input !== "") {
+                let response;
                 /** is input a clear()? */
-                if (input.toLowerCase() === "clear" || input.toLowerCase() === "clear()") {
+                input = input.toLocaleLowerCase();
+                if (input === "clear" || input === "clear()") {
                     _clearTerminal();
                     return;
+                } else if (input === "help") {
+                    response = help();
+                } else {
+                    response = _processTerminalInput(input)
                 }
-                let response = _processTerminalInput(input);
+                _deactivateInput();
                 createNewLine(response);
+            } else {
+                console.error('You have entered an invalid input');
             }
         }
     }
@@ -72,17 +79,29 @@ function Terminal(element, options) {
         return /<[a-z][\s\S]*>/.test(output);
     }
 
-
     function createNewLine(res) {
         let last_el = _getLastLineElement(); // get last element
         let new_node = last_el.cloneNode(true); //clone last element
-        let new_input = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
-        if (new_input) {
+
+        /** element to handle root response from user input */
+        let response_el = new_node.querySelector('#commandInput'); // get input of the new element (cloned)
+        if (response_el) {
             /** TODO: this line is too much dependent on the DOM */
-            new_input.parentElement.firstElementChild.innerText = _self.options.root; // set its innerhtml to root (root@user)
-            new_input.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
-            new_input.innerHTML = res;
-            /*new_input.innerText = res;*/
+            response_el.parentElement.firstElementChild.innerText = _self.options.root; // set its innerhtml to root (root@user)
+            response_el.parentElement.firstElementChild.classList.add('prefix-root'); // add a class to style the 'root@user' text
+
+            if (typeof(res) !== 'string') {
+                res.then(function(url) {
+                    response_el.innerHTML = url;
+                });
+            } else {
+                if (_checkOutputIsHTML(res)) {
+                    response_el.innerHTML = res;
+                } else {
+                    response_el.innerText = res;
+                }
+            }
+            pageScroll();
         }
         last_el.after(new_node);
 
@@ -93,13 +112,15 @@ function Terminal(element, options) {
             if (_new_input) {
                 _new_input.parentElement.firstElementChild.innerText = _self.options.guest;
                 _new_input.parentElement.firstElementChild.classList.remove('prefix-root');
-                _new_input.innerHTML = "_";
-                _new_input.innerText = "_";
+                _new_input.innerHTML = "";
+                _new_input.innerText = "";
                 _last_line.after(_new_node);
                 _killElementAfterCloning(_last_line, null);
             }
             _self.element = _new_input;
-            _attachEventToNewInputElement(_new_input)
+            _attachEventToNewInputElement(_new_input);
+            _activateInput();
+            _onInputBlur();
         });
     }
 
@@ -128,8 +149,8 @@ function Terminal(element, options) {
 
     function _getOptions(opts) {
         let options = new Object({
-            root: "wiredmartian@user:~#",
-            guest: "guest@user:~#",
+            root: "wiredmartian@user:~ $",
+            guest: "guest@user:~ $",
             intro: "",
             source: "local", // remote or local
             prefix: "wm",
@@ -140,20 +161,17 @@ function Terminal(element, options) {
         /** no commands passed */
         if (!opts.commands) {
             if (opts.source) {
-                _getDataSource();
+                _self.options.commands = terminalcommands;
             }
         }
     }
-
     function _isPrefixValid(prefix) {
         let _prefix = prefix.toString().toLowerCase().trim();
         return (_prefix === _self.options.prefix);
     }
-
     function _getPrefixFromInput(input) {
         return input.toString().trim().split(" ")[0].trim();
     }
-
     function _getTerminalCommands() {
         let cmd = [];
         _self.options.commands.map((value) => {
@@ -164,13 +182,23 @@ function Terminal(element, options) {
     function _processTerminalInput(input) {
         let arr = _getTerminalCommands();
         let result = "";
+        let pendingGifPromise = "PANIC GIF HERE";
         if (arr.length !== 0 && typeof(input) !== 'undefined') {
-            result =`\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`;
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {
-                return result;
+                return pendingGifPromise.then(function(img) {
+                    return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
+                });
             } else {
-                input = input.split(" ")[1].toString().trim();
+                /** no keyword used after prefix */
+                input = input.split(" ");
+                if (input[1]) {
+                    /** check command after the prefix is valid */
+                    input = input[1].toString().trim()
+                } else {
+                    result = help();
+                    return result;
+                }
             }
             for (let index in arr) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
@@ -179,19 +207,25 @@ function Terminal(element, options) {
                 }
             }
         }
-        return result;
+        if (!result) {
+            // `\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`
+            return pendingGifPromise.then(function(img) {
+                return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
+            });
+        } else {
+            return result;
+        }
     }
-
     function _loadTerminalHTML(callback) {
         // language=HTML
-        let _template = "<div class=\"window-title-bar\">root@wiredmartian:~</div>\n" +
-            "<div id=\"window\" class=\"terminal\">\n" +
-            "    <div class=\"typewriter-container\"><span id=\"typewriter\"></span></div>\n" +
-            "    <div class=\"lines\">\n" +
-            "        <div class=\"line\">\n" +
-            "            <span class=\"prefix\">guest@user:~# </span>\n" +
+        let _template = "<div class='window-title-bar'>wiredmartian:~ $</div>\n" +
+            "<div id='window' class='terminal'>\n" +
+            "    <div class='typewriter-container'><span id='typewriter'></span></div>\n" +
+            "    <div class='lines'>\n" +
+            "        <div class='line'>\n" +
+            "            <span class='prefix'>guest@user:~ $ </span>\n" +
             "            <span></span>\n" +
-            "            <small id=\"commandInput\" class=\"caret\" contenteditable=\"true\" spellcheck=\"false\">_</small>\n" +
+            "            <small id='commandInput' class='caret' contenteditable='true' spellcheck='false'></small>\n" +
             "        </div>\n" +
             "    </div>\n" +
             "</div>";
@@ -207,8 +241,8 @@ function Terminal(element, options) {
     }
     function initializeTyping() {
         let intro = "<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
-            "Use the <span style=\"color:#fffd00\">$ wm help</span> command to view all the available commands. ^1000" +
-            "Use <span style=\"color:#fffd00\">$ clear()</span> to clear this message</small>";
+            "Use the <span class='prefix-root'>$ help</span> command to view all the available commands. ^1000" +
+            "Use <span class='prefix-root'>$ clear()</span> to clear this message</small>";
 
         /** wait for options init before running typed.js */
         if (typeof (_self.options.intro) !== "undefined" && _self.options.intro !== "") {
@@ -216,11 +250,17 @@ function Terminal(element, options) {
         }
         animateTyping(intro);
     }
-
     function help() {
         /** do help things here*/
+        let html = "<br><strong>Use the commands below to query info: </strong><br>";
+        const prefix = _self.options.prefix;
+        Array.from(_self.options.commands).map(item => {
+            let _key = Object.keys(item);
+            html += `<span class="prefix-root">${ prefix +' '+ _key }</span><br>`;
+        });
+        html += "<strong>To clear the terminal, use <b>clear</b></strong>";
+        return html;
     }
-
     function getIntroFromOptions() {
         let _intro = _self.options.intro;
         if (_intro && _self.options.intro.constructor === Array) {
@@ -233,14 +273,14 @@ function Terminal(element, options) {
         if (_intro) {
             intro = _intro;
         } else {
-            intro = Array.from(intro.split(",")); // Touch ye NOT, this piece of code. What??
+            intro = Array.from(intro); // Touch ye NOT, this piece of code. What??
         }
 
         let options = {
             strings: intro,
             startDelay: 1000,
-            typeSpeed: 40,
-            backSpeed: 10,
+            typeSpeed: 50,
+            backSpeed: 20,
             cursorChar: '_'
         };
         initTyped(options);
@@ -248,51 +288,45 @@ function Terminal(element, options) {
     function initTyped(opts) {
         new Typed("#typewriter", opts);
     }
-    function _initFirebase () {
-        firebase.initializeApp(firebaseconfig);
-        _db = firebase.firestore();
-        _db.settings({ timestampsInSnapshots: true });
-        if (!firebase.apps.length) {
-            console.info("firebase is not initialized");
-        } else {
-            console.info("firebase is already initialized");
-        }
-    }
-    function getRemoteCommands() {
-        let _commandsRef = _db.collection("commands");
-        _commandsRef.get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                _commandsRef.doc(`${doc.id}`).get().then((snapshot) => {
-                    if (snapshot.exists) {
-                        _self.options.commands = Object.entries(snapshot.data().commands).map((item) => {
-                            let key = item[0], val = item[1];
-                            return {[key]: val};
-                        });
-                        console.info(_self.options.commands);
-                    }
-                });
-            });
+
+    function _activateInput() {
+        _self.element.addEventListener('click', function () {
+            _self.element.classList.add('active');
         });
     }
-    function _getDataSource() {
-        let source = _self.options.source;
-        /** no source specified */
-        if (source) {
-            switch (source) {
-                case "local" :
-                    _self.options.commands = terminalcommands;
-                    console.info(_self.options.commands);
-                    break;
-                case "remote" :
-                    _initFirebase();
-                    getRemoteCommands();
-                    break;
-                default:
-                    _self.options.commands = terminalcommands;
-            }
-        } else {
-            console.info("no data source specified");
-        }
+    function _deactivateInput() {
+        _self.element.classList.remove('active');
+    }
+    function _onInputBlur() {
+        _self.element.addEventListener('blur', function () {
+            _self.element.classList.remove('active');
+        });
+    }
+    function pageScroll() {
+        window.scrollBy(0,1);
+        let scrollDelay = setTimeout(pageScroll,10)
+        window.onmousewheel = function () {
+            clearTimeout(scrollDelay);    
+        };
+        
     }
 }
-new Terminal("#commandInput", {});
+new Terminal("#commandInput", {
+    intro:[
+        "<h1>Hello 👋 </h1>^800" +
+        "My name is <b>Solomzi Jikani</b> aka the <span class='prefix-root'>Wired Martian</span>.<br>^800" +
+        "I'm a <b>web developer</b> based in Durban, originally from Port St Johns.<br>^800" +
+        "I build <b>web apps</b> using <span class='prefix-root'>JavaScript, Angular 2+, .NET</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
+        "I have some experience with <span class='prefix-root'>NativeScript </span> and <span class='prefix-root'>Ionic</span> for building <b>hybrid mobile apps</b>.<br>^600" +
+        "<b><a target='_blank' href='https://drive.google.com/file/d/12p_aFwSiqziIQIJYyxuThod76kpXa_6g/view?usp=sharing'>Download my full resume </a></b> for more information about myself.<br>^800<br>" +
+        "<h2>Contacts:</h2>" +
+        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong> | <strong> madcoder@wiredmartian.co.za</strong><br>" +
+        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>github</a>" +
+        "<a class='contact-link' href='#' target='_blank'>blog</a>" +
+        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>twitter</a>" +
+        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>instagram</a>" +
+        "<a class='contact-link' href='https://www.youtube.com/channel/UCxMBdiwRylKoT_KUstcgsNg/videos' target='_blank'>YouTube</a><br><br>^800" +
+        "Click on 'start typing..' and type 'wm' to see all the commands you can execute 😊"
+    ],
+    source: "local"
+});

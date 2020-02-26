@@ -2,8 +2,8 @@
   margin: 0;
   padding: 0;
   font-family:"Source Code Pro", "Courier New", Courier, monospace;
-  line-height: 30px;
-  font-size: 1rem;
+  line-height: 32px;
+  font-size: 16px;
 }
 body {
   background: rgb(38, 38, 38);
@@ -31,8 +31,21 @@ $green-color: #21f838;
       min-height: 15px;
       margin: 15px auto;
       #commandInput {
-        width: 5px;
-        height: 14px;
+        width: 1px;
+        height: 1px;
+        border: none;
+        margin: 0;
+        padding:0 6px;
+        cursor: text;
+      }
+      #commandInput::before {
+        content: 'start typing... ';
+      }
+      #commandInput.active::before {
+        content: '';
+      }
+      ul {
+        padding-left: 30px;
       }
     }
     .prefix {
@@ -40,6 +53,20 @@ $green-color: #21f838;
     }
     .prefix-root {
       color: $yellow-color;
+    }
+
+    /** social links styles */
+    a.contact-link::before{
+      content: '> ';
+    }
+    a.contact-link {
+      font-weight: 500;
+      text-decoration: none;
+      color: $yellow-color;
+      padding: 0 .8em;
+    }
+    a.contact-link:hover, a.contact-link:focus{
+      color: #FFF;
     }
   }
 }
@@ -52,16 +79,21 @@ $green-color: #21f838;
 [contenteditable]:focus {
   outline: none;
 }
-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  a {
-    color: $green-color;
-    text-decoration: none;
-
-    img {
-      width: 40px;
-    }
+a {
+  color: $green-color;
+  text-decoration: none;
+}
+.git-image {
+  width: 30%;
+  height: auto;
+}
+@media (max-width: 768px) {
+  .git-image {
+    width: 60%;
+  }
+}
+@media (max-width: 425px) {
+  .git-image {
+    width: 100%;
   }
 }
