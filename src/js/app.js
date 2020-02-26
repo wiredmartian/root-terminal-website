@@ -337,7 +337,7 @@ function Terminal(element, options) {
             switch (source) {
                 case "local" :
                     _self.options.commands = terminalcommands;
-                    console.info(_self.options.commands);
+                    _initFirebase();
                     break;
                 case "remote" :
                     _initFirebase();
@@ -388,5 +388,5 @@ new Terminal("#commandInput", {
         "<a class='contact-link' href='https://www.youtube.com/channel/UCxMBdiwRylKoT_KUstcgsNg/videos' target='_blank'>YouTube</a><br><br>^800" +
         "Click on 'start typing..' and type 'wm' to see all the commands you can execute 😊"
     ],
-    source: "remote"
+    source: "local"
 });
