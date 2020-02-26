@@ -1,10 +1,7 @@
 import { firebaseconfig } from "./firebase.config";
 import { terminalcommands } from "./data";
 import Typed from 'typed.js';
-import * as firebase from 'firebase/app';
-import 'firebase/firestore';
 import '../css/main.scss'
-let _db, _storage;
 
 function Terminal(element, options) {
     let _self = this;
@@ -33,10 +30,10 @@ function Terminal(element, options) {
                     _onInputBlur();
                 }
             } else {
-                console.info(`The element ${_self.element} was not found`);
+                console.error(`The element ${_self.element} was not found`);
             }
         } else {
-            console.info(`${_self.element} unexpected element`);
+            console.error(`${_self.element} unexpected element`);
         }
     }
     function _handleUserInput(e) {
@@ -84,7 +81,6 @@ function Terminal(element, options) {
     }
 
     function createNewLine(res) {
-        console.log(typeof(res));
         let last_el = _getLastLineElement(); // get last element
         let new_node = last_el.cloneNode(true); //clone last element
 
@@ -166,7 +162,7 @@ function Terminal(element, options) {
         /** no commands passed */
         if (!opts.commands) {
             if (opts.source) {
-                _getDataSource();
+                _self.options.commands = terminalcommands;
             }
         }
     }
@@ -187,7 +183,7 @@ function Terminal(element, options) {
     function _processTerminalInput(input) {
         let arr = _getTerminalCommands();
         let result = "";
-        let pendingGifPromise = getPanicGif();
+        let pendingGifPromise = "PANIC GIF HERE";
         if (arr.length !== 0 && typeof(input) !== 'undefined') {
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {
@@ -293,30 +289,7 @@ function Terminal(element, options) {
     function initTyped(opts) {
         new Typed("#typewriter", opts);
     }
-    function _initFirebase () {
-        firebase.initializeApp(firebaseconfig);
-        _db = firebase.firestore();
-        _storage = firebase.storage();
-        _db.settings({ timestampsInSnapshots: true });
-        if (!firebase.apps.length) {
-            console.info("firebase is not initialized");
-        } 
-    }
-    function getRemoteCommands() {
-        let _commandsRef = _db.collection("commands");
-        _commandsRef.get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                _commandsRef.doc(`${doc.id}`).get().then((snapshot) => {
-                    if (snapshot.exists) {
-                        _self.options.commands = Object.entries(snapshot.data().commands).map((item) => {
-                            let key = item[0], val = item[1];
-                            return {[key]: val};
-                        });
-                    }
-                });
-            });
-        });
-    }
+
     function _activateInput() {
         _self.element.addEventListener('click', function () {
             _self.element.classList.add('active');
@@ -328,38 +301,6 @@ function Terminal(element, options) {
     function _onInputBlur() {
         _self.element.addEventListener('blur', function () {
             _self.element.classList.remove('active');
-        });
-    }
-    function _getDataSource() {
-        let source = _self.options.source;
-        /** no source specified */
-        if (source) {
-            switch (source) {
-                case "local" :
-                    _self.options.commands = terminalcommands;
-                    _initFirebase();
-                    break;
-                case "remote" :
-                    _initFirebase();
-                    getRemoteCommands();
-                    break;
-                default:
-                    _self.options.commands = terminalcommands;
-            }
-        } else {
-            console.info("no data source specified");
-        }
-    }
-    function _getRandomInt(maxnumber) {
-        return Math.floor(Math.random() * Math.floor(maxnumber));
-    }
-     function getPanicGif() {
-        let gif = _getRandomInt(10) + '.gif';
-        return _storage.ref('panic/' + gif).getDownloadURL()
-        .then(function(url) {
-            return url
-        }).catch(function(err) {
-            return '';
         });
     }
     function pageScroll() {
