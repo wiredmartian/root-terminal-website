@@ -218,7 +218,7 @@ function Terminal(element, options) {
     }
     function _loadTerminalHTML(callback) {
         // language=HTML
-        let _template = "<div class='window-title-bar'>wiredmartian:~ $</div>\n" +
+        let _template = "<div class='window-title-bar'>wiredmartian:~</div>\n" +
             "<div id='window' class='terminal'>\n" +
             "    <div class='typewriter-container'><span id='typewriter'></span></div>\n" +
             "    <div class='lines'>\n" +
@@ -306,25 +306,22 @@ function Terminal(element, options) {
         window.scrollBy(0,1);
         let scrollDelay = setTimeout(pageScroll,10)
         window.onmousewheel = function () {
-            clearTimeout(scrollDelay);    
+            clearTimeout(scrollDelay);
         };
-        
+
     }
 }
 new Terminal("#commandInput", {
     intro:[
         "<h1>Hello 👋 </h1>^800" +
         "My name is <b>Solomzi Jikani</b> aka the <span class='prefix-root'>Wired Martian</span>.<br>^800" +
-        "I'm a <b>web developer</b> based in Durban, originally from Port St Johns.<br>^800" +
-        "I build <b>web apps</b> using <span class='prefix-root'>JavaScript, Angular 2+, .NET</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
-        "I have some experience with <span class='prefix-root'>NativeScript </span> and <span class='prefix-root'>Ionic</span> for building <b>hybrid mobile apps</b>.<br>^600" +
-        "<b><a target='_blank' href='https://drive.google.com/file/d/12p_aFwSiqziIQIJYyxuThod76kpXa_6g/view?usp=sharing'>Download my full resume </a></b> for more information about myself.<br>^800<br>" +
+        "I'm a <b>developer</b> based in Durban, originally from Port St Johns.<br>^800" +
+        "I build using <span class='prefix-root'>JavaScript, TypeScript, Angular, .NET C#</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
         "<h2>Contacts:</h2>" +
-        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong> | <strong> madcoder@wiredmartian.co.za</strong><br>" +
-        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>github</a>" +
-        "<a class='contact-link' href='#' target='_blank'>blog</a>" +
-        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>twitter</a>" +
-        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>instagram</a>" +
+        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong><br>" +
+        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>Github</a>" +
+        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>Twitter</a>" +
+        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>Instagram</a>" +
         "<a class='contact-link' href='https://www.youtube.com/channel/UCxMBdiwRylKoT_KUstcgsNg/videos' target='_blank'>YouTube</a><br><br>^800" +
         "Click on 'start typing..' and type 'wm' to see all the commands you can execute 😊"
     ],
