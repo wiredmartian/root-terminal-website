@@ -14,6 +14,8 @@ You must have Nodejs installed. Then use `npm` to install `webpack` and `webpack
 
 ### Screenshots
 
+<p><img src="https://github.com/wiredmartian/root-terminal/blob/master/src/assets/screen-2.png" width="100%"/></p>
+
 <p><img src="https://github.com/wiredmartian/root-terminal/blob/master/src/assets/screen-1.png" width="100%"/></p>
 
 
