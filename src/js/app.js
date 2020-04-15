@@ -43,7 +43,7 @@ function Terminal(element, options) {
                 input = _self.element.innerText;
             }
 
-            if (typeof input !== "undefined" && input != null && input !== "") {
+            if (input) {
                 let response;
                 /** is input a clear()? */
                 input = input.toLocaleLowerCase();
@@ -101,7 +101,7 @@ function Terminal(element, options) {
                     response_el.innerText = res;
                 }
             }
-            pageScroll();
+            // pageScroll();
         }
         last_el.after(new_node);
 
@@ -174,8 +174,13 @@ function Terminal(element, options) {
     }
     function _getTerminalCommands() {
         let cmd = [];
-        _self.options.commands.map((value) => {
-            cmd.push(Array.from(Object.keys(value)));
+        const commands = [..._self.options.commands];
+        commands.map((value) => {
+            /** get object key */
+            const key = Object.keys(value);
+            /** convert keys to array */
+            const item = [...key];
+            cmd.push(item);
         });
         return cmd;
     }
@@ -183,12 +188,12 @@ function Terminal(element, options) {
         let arr = _getTerminalCommands();
         let result = "";
         let pendingGifPromise = "PANIC GIF HERE";
-        if (arr.length !== 0 && typeof(input) !== 'undefined') {
+        if (arr.length !== 0 && input) {
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {
-                return pendingGifPromise.then(function(img) {
-                    return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
-                });
+                return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
+                /* return pendingGifPromise.then(function(img) {
+                });*/
             } else {
                 /** no keyword used after prefix */
                 input = input.split(" ");
@@ -200,7 +205,7 @@ function Terminal(element, options) {
                     return result;
                 }
             }
-            for (let index in arr) {
+            for (let index = 0; index <= arr.length; index++) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
                     result = Object.values(_self.options.commands[index])[0];
                     break;
@@ -209,9 +214,7 @@ function Terminal(element, options) {
         }
         if (!result) {
             // `\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`
-            return pendingGifPromise.then(function(img) {
-                return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
-            });
+            return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
         } else {
             return result;
         }
