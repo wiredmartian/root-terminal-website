@@ -245,9 +245,9 @@ function Terminal(element, options) {
         }
     }
     function initializeTyping() {
-        let intro = "<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
+        let intro = ["<small>Terminal is a simple javascript mini library that mimics the standard terminal (win + linux). ^1000" +
             "Use the <span class='prefix-root'>$ help</span> command to view all the available commands. ^1000" +
-            "Use <span class='prefix-root'>$ clear()</span> to clear this message</small>";
+            "Use <span class='prefix-root'>$ clear()</span> to clear this message</small>"];
 
         /** wait for options init before running typed.js */
         if (typeof (_self.options.intro) !== "undefined" && _self.options.intro !== "") {
@@ -317,18 +317,5 @@ function Terminal(element, options) {
     }
 }
 new Terminal("#commandInput", {
-    intro:[
-        "<h1>Hello 👋 </h1>^800" +
-        "My name is <b>Solomzi Jikani</b> aka the <span class='prefix-root'>Wired Martian</span>.<br>^800" +
-        "I'm a <b>developer</b> based in Durban, originally from Port St Johns.<br>^800" +
-        "I build using <span class='prefix-root'>JavaScript, TypeScript, Angular, .NET C#</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
-        "<h2>Contacts:</h2>" +
-        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong><br>" +
-        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>Github</a>" +
-        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>Twitter</a>" +
-        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>Instagram</a>" +
-        "<a class='contact-link' href='https://www.youtube.com/channel/UCxMBdiwRylKoT_KUstcgsNg/videos' target='_blank'>YouTube</a><br><br>^800" +
-        "Click on 'start typing..' and type 'wm' to see all the commands you can execute 😊"
-    ],
     source: "local"
 });
