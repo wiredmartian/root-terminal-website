@@ -18,7 +18,7 @@ function Terminal(element, options) {
         /** HTML Element Selector */
         if (typeof _self.element === "string") {
             let _htmlElement = document.querySelector(_self.element);
-            if (typeof _htmlElement !== "undefined" && _htmlElement !== null) {
+            if (_htmlElement) {
                 let isSmall = _htmlElement.localName;
                 if (isSmall === "small") {
                     _self.element = _htmlElement;
@@ -205,7 +205,7 @@ function Terminal(element, options) {
                     return result;
                 }
             }
-            for (let index = 0; index <= arr.length; index++) {
+            for (let index = 1; index < arr.length; index++) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
                     result = Object.values(_self.options.commands[index])[0];
                     break;
@@ -214,7 +214,9 @@ function Terminal(element, options) {
         }
         if (!result) {
             // `\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`
-            return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
+            const img = 'https://www.memesmonkey.com/images/memesmonkey/ba/ba8153b6def991d0ac72155dc915dea7.jpeg'
+            return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.
+        </span><br><img alt="" class='git-image' src="${img}">`;
         } else {
             return result;
         }
