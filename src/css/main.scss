@@ -1,3 +1,4 @@
+
 * {
   margin: 0;
   padding: 0;
@@ -5,14 +6,17 @@
   line-height: 32px;
   font-size: 16px;
 }
-body {
+html {
+  height: 100vh;
   background: rgb(38, 38, 38);
 }
 $yellow-color: #fffd00;
 $green-color: #21f838;
+
 #terminal-container {
-  display: flex;
-  flex-direction: column;
+  width: 80%;
+  margin: 2% auto;
+  text-align: center;
 
   .window-title-bar {
     height: 20px;

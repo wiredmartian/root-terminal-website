@@ -18,7 +18,7 @@ function Terminal(element, options) {
         /** HTML Element Selector */
         if (typeof _self.element === "string") {
             let _htmlElement = document.querySelector(_self.element);
-            if (typeof _htmlElement !== "undefined" && _htmlElement !== null) {
+            if (_htmlElement) {
                 let isSmall = _htmlElement.localName;
                 if (isSmall === "small") {
                     _self.element = _htmlElement;
@@ -43,7 +43,7 @@ function Terminal(element, options) {
                 input = _self.element.innerText;
             }
 
-            if (typeof input !== "undefined" && input != null && input !== "") {
+            if (input) {
                 let response;
                 /** is input a clear()? */
                 input = input.toLocaleLowerCase();
@@ -101,7 +101,7 @@ function Terminal(element, options) {
                     response_el.innerText = res;
                 }
             }
-            pageScroll();
+            // pageScroll();
         }
         last_el.after(new_node);
 
@@ -174,8 +174,13 @@ function Terminal(element, options) {
     }
     function _getTerminalCommands() {
         let cmd = [];
-        _self.options.commands.map((value) => {
-            cmd.push(Array.from(Object.keys(value)));
+        const commands = [..._self.options.commands];
+        commands.map((value) => {
+            /** get object key */
+            const key = Object.keys(value);
+            /** convert keys to array */
+            const item = [...key];
+            cmd.push(item);
         });
         return cmd;
     }
@@ -183,12 +188,12 @@ function Terminal(element, options) {
         let arr = _getTerminalCommands();
         let result = "";
         let pendingGifPromise = "PANIC GIF HERE";
-        if (arr.length !== 0 && typeof(input) !== 'undefined') {
+        if (arr.length !== 0 && input) {
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {
-                return pendingGifPromise.then(function(img) {
-                    return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
-                });
+                return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
+                /* return pendingGifPromise.then(function(img) {
+                });*/
             } else {
                 /** no keyword used after prefix */
                 input = input.split(" ");
@@ -200,7 +205,7 @@ function Terminal(element, options) {
                     return result;
                 }
             }
-            for (let index in arr) {
+            for (let index = 1; index < arr.length; index++) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
                     result = Object.values(_self.options.commands[index])[0];
                     break;
@@ -209,16 +214,16 @@ function Terminal(element, options) {
         }
         if (!result) {
             // `\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`
-            return pendingGifPromise.then(function(img) {
-                return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
-            });
+            const img = 'https://www.memesmonkey.com/images/memesmonkey/ba/ba8153b6def991d0ac72155dc915dea7.jpeg'
+            return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.
+        </span><br><img alt="" class='git-image' src="${img}">`;
         } else {
             return result;
         }
     }
     function _loadTerminalHTML(callback) {
         // language=HTML
-        let _template = "<div class='window-title-bar'>wiredmartian:~ $</div>\n" +
+        let _template = "<div class='window-title-bar'>wiredmartian:~</div>\n" +
             "<div id='window' class='terminal'>\n" +
             "    <div class='typewriter-container'><span id='typewriter'></span></div>\n" +
             "    <div class='lines'>\n" +
@@ -306,25 +311,22 @@ function Terminal(element, options) {
         window.scrollBy(0,1);
         let scrollDelay = setTimeout(pageScroll,10)
         window.onmousewheel = function () {
-            clearTimeout(scrollDelay);    
+            clearTimeout(scrollDelay);
         };
-        
+
     }
 }
 new Terminal("#commandInput", {
     intro:[
         "<h1>Hello 👋 </h1>^800" +
         "My name is <b>Solomzi Jikani</b> aka the <span class='prefix-root'>Wired Martian</span>.<br>^800" +
-        "I'm a <b>web developer</b> based in Durban, originally from Port St Johns.<br>^800" +
-        "I build <b>web apps</b> using <span class='prefix-root'>JavaScript, Angular 2+, .NET</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
-        "I have some experience with <span class='prefix-root'>NativeScript </span> and <span class='prefix-root'>Ionic</span> for building <b>hybrid mobile apps</b>.<br>^600" +
-        "<b><a target='_blank' href='https://drive.google.com/file/d/12p_aFwSiqziIQIJYyxuThod76kpXa_6g/view?usp=sharing'>Download my full resume </a></b> for more information about myself.<br>^800<br>" +
+        "I'm a <b>developer</b> based in Durban, originally from Port St Johns.<br>^800" +
+        "I build using <span class='prefix-root'>JavaScript, TypeScript, Angular, .NET C#</span> and <span class='prefix-root'>Nodejs.</span><br>^800" +
         "<h2>Contacts:</h2>" +
-        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong> | <strong> madcoder@wiredmartian.co.za</strong><br>" +
-        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>github</a>" +
-        "<a class='contact-link' href='#' target='_blank'>blog</a>" +
-        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>twitter</a>" +
-        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>instagram</a>" +
+        "<strong> +27 71 786 2455</strong> | <strong> solomzi.jikani@gmail.com</strong><br>" +
+        "<a class='contact-link' href='https://github.com/wiredmartian' target='_blank'>Github</a>" +
+        "<a class='contact-link' href='https://twitter.com/wiredmartian' target='_blank'>Twitter</a>" +
+        "<a class='contact-link' href='https://instagram.com/wiredmartian' target='_blank'>Instagram</a>" +
         "<a class='contact-link' href='https://www.youtube.com/channel/UCxMBdiwRylKoT_KUstcgsNg/videos' target='_blank'>YouTube</a><br><br>^800" +
         "Click on 'start typing..' and type 'wm' to see all the commands you can execute 😊"
     ],
