@@ -323,8 +323,10 @@ new Terminal("#commandInput", {
     intro: [`<small>Hi, my name is <b>Solomzi Jikani.^1000</b><br/> This is a <span class='prefix-root'>terminal-like</span> webpage, and uses commands to view information.^1000 <br/>` +
     `To view available commands, type in <span class='prefix-root'>help</span> and click enter. ^1000 <br/>` +
     `Type <span class='prefix-root'>clear()</span> to clear all previous information</small> <br/><br/> ^500` +
-    `Alternatively, you can click here <b><a href="dist/${resume}">To Download My Resume</a></b>` +
+    `Alternatively, you can click here <b><a href="${resume}">To Download My Resume</a></b>` +
     `<br/> Thanks for visiting :)`],
     source: "local", // remote or local
     prefix: "wm"
 });
+
+console.log(resume);

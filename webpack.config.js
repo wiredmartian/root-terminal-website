@@ -8,7 +8,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
-        publicPath: "/dist"
+        publicPath: ""
     }, module: {
         rules: [
             {
@@ -29,10 +29,11 @@ module.exports = {
             },
             {
             test: /\.(png|svg|jpg|gif|pdf)$/,
-             use: [
-               'file-loader',
-             ],
-           },
+             loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                }
+            },
         ]
     },
     plugins: [
