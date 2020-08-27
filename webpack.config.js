@@ -8,7 +8,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
-        publicPath: "/dist"
+        publicPath: ""
     }, module: {
         rules: [
             {
@@ -26,7 +26,14 @@ module.exports = {
                 use: extractPlugin.extract({
                     use: ['css-loader', 'sass-loader']
                 })
-            }
+            },
+            {
+            test: /\.(png|svg|jpg|gif|pdf)$/,
+             loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                }
+            },
         ]
     },
     plugins: [

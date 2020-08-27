@@ -13,6 +13,3 @@ dist/
 src/firebase.config.js
 #node_modules
 node_modules/
-
-#webpack compiled files
-dist/
