@@ -26,7 +26,13 @@ module.exports = {
                 use: extractPlugin.extract({
                     use: ['css-loader', 'sass-loader']
                 })
-            }
+            },
+            {
+            test: /\.(png|svg|jpg|gif|pdf)$/,
+             use: [
+               'file-loader',
+             ],
+           },
         ]
     },
     plugins: [
