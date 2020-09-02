@@ -1,5 +1,5 @@
 ## Terminal
-Simple javascript web app that mimics the standard command line interface.
+Simple javascript web app that mimics the standard command line interface. All the commands are stored as a JSON object on `data.js` file
 
 
 ### Running
@@ -12,37 +12,10 @@ You must have Nodejs installed. Then use `npm` to install `webpack` and `webpack
 `$ npm run build`
 
 
-### Installation
-If you wanna use this on your own application, then you'll need a tweak it based to your specs.
-Do the following:
+### Screenshots
 
-`$ npm run build:prod`
+<p><img src="https://github.com/wiredmartian/root-terminal/blob/master/src/assets/screen-2.png" width="100%"/></p>
 
-Locate the created `/dist` folder for `bundle.js` file and `main.css` file.
+<p><img src="https://github.com/wiredmartian/root-terminal/blob/master/src/assets/screen-1.png" width="100%"/></p>
 
-Include the files in your solution, .css in the <head> and .js before </body>:
 
-~~~html
-<link rel="stylesheet" href="dist/main.css">
-
-<script src="dist/bundle.js"></script>
-~~~
-
-Create a container element for your terminal
-~~~html
-<div id="terminal-container"></div>
-~~~
-
-#### Initialinzing the app
-
-~~~javascript
-let options = { 
-    root: "wiredmartian@user:~#",
-    guest: "guest@user:~#",
-    intro: "",
-    source: "local", // remote or local
-    prefix: "wm",
-    commands: [{ os: "Linux"}]
-    }
-new Terminal("#commandInput", options);
-~~~
