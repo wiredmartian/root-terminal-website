@@ -3,6 +3,9 @@ import Typed from 'typed.js';
 import '../css/main.scss';
 import resume from '../assets/Solomzi_Jikani_-_Software_Developer.pdf';
 
+/** NB: This code was written by someone learning JavaScript + Webpack at the time */
+/** Some parts, I do not understand myself as the writer. But it does work*/
+
 function Terminal(element, options) {
     let _self = this;
     _self.options = options;
@@ -320,13 +323,12 @@ function Terminal(element, options) {
 new Terminal("#commandInput", {
     root: "root@mars:~ $",
     guest: "guest@mars:~ $",
-    intro: [`<small>Hi, my name is <b>Solomzi Jikani.^1000</b><br/> This is a <span class='prefix-root'>terminal-like</span> webpage, and uses commands to view information.^1000 <br/>` +
-    `To view available commands, type in <span class='prefix-root'>help</span> and click enter. ^1000 <br/>` +
+    intro: [`<small>Hi, my name is <b>Solomzi Jikani, a software developer</b> based in Durban.^500<br/> 
+    I am a minimalist, and this is my minimal website, <span class='prefix-root'>terminal-like</span> webpage, and it uses commands to view information.^500 <br/>` +
+    `To view available commands, type in <span class='prefix-root'>help</span> or <span class='prefix-root'>wm</span> and click enter. ^800 <br/>` +
     `Type <span class='prefix-root'>clear()</span> to clear all previous information</small> <br/><br/> ^500` +
-    `Alternatively, you can click here <b><a href="${resume}">To Download My Resume</a></b>` +
+    `Alternatively, you can click here <b><a href="${resume}" target="_blank">To Download My Resume</a></b>` +
     `<br/> Thanks for visiting :)`],
     source: "local", // remote or local
     prefix: "wm"
 });
-
-console.log(resume);
