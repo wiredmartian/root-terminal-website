@@ -1,6 +1,6 @@
 {
   "name": "terminal",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "js hacker screen cmd",
   "main": "app.js",
   "scripts": {
@@ -31,7 +31,6 @@
     "webpack-dev-server": "^3.1.11"
   },
   "dependencies": {
-    "firebase": "^5.6.0",
     "typed.js": "^2.0.9"
   }
 }
