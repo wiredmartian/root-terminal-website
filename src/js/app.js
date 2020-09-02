@@ -206,7 +206,7 @@ function Terminal(element, options) {
                     return result;
                 }
             }
-            for (let index = 1; index < arr.length; index++) {
+            for (let index = 0; index < arr.length; index++) {
                 if (arr[index].toString().includes(input.toLocaleLowerCase())) {
                     result = Object.values(_self.options.commands[index])[0];
                     break;
