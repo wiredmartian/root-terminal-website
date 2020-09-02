@@ -1,5 +1,5 @@
 ## Terminal
-Simple javascript web app that mimics the standard command line interface.
+Simple javascript web app that mimics the standard command line interface. All the commands are stored as a JSON object on `data.js` file
 
 
 ### Running
