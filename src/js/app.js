@@ -6,6 +6,24 @@ import resume from '../assets/Solomzi_Jikani_-_Software_Developer.pdf';
 /** NB: This code was written by someone learning JavaScript + Webpack at the time */
 /** Some parts, I do not understand myself as the writer. But it does work*/
 
+let panicGifs = [
+    "https://media.giphy.com/media/xUOwGcv3pLQabcExR6/giphy-downsized.gif",
+    "https://media.giphy.com/media/yUrUb9fYz6x7a/giphy-downsized.gif",
+    "https://media.giphy.com/media/vfRXOUnQpqkUw/giphy.gif",
+    "https://media.giphy.com/media/tJeGZumxDB01q/giphy-downsized.gif",
+    "https://media.giphy.com/media/KiXiO1iR3fFhC/giphy-downsized.gif",
+    "https://media.giphy.com/media/3o85xDWOG8Sbl9yQzm/giphy.gif",
+    "https://media.giphy.com/media/KBYyUGgDEsILK/giphy.gif",
+    "https://media.giphy.com/media/3ohhwF34cGDoFFhRfy/giphy-downsized.gif",
+    "https://media.giphy.com/media/pDdzX4l9jqA80/giphy.gif",
+    "https://media.giphy.com/media/wZmCr7odNxKP6/giphy-downsized.gif",
+    "https://media.giphy.com/media/9PTaAhwri56V2/giphy.gif",
+    "https://media.giphy.com/media/7W4opvDMZhJ3a/giphy.gif",
+    "https://media.giphy.com/media/52HjuHsfVO69q/giphy-downsized.gif",
+    "https://media.giphy.com/media/8Ep2aFnTfs6TC/giphy.gif",
+    "https://media.giphy.com/media/26BkNsQzs593dRzJ6/giphy.gif",
+    "https://media.giphy.com/media/RjrA74OSKh0srBEt9V/giphy.gif"
+]
 function Terminal(element, options) {
     let _self = this;
     _self.options = options;
@@ -191,13 +209,11 @@ function Terminal(element, options) {
     function _processTerminalInput(input) {
         let arr = _getTerminalCommands();
         let result = "";
-        let pendingGifPromise = "PANIC GIF HERE";
+        let panic = panicGifs[Math.floor(Math.random() * 16)];
         if (arr.length !== 0 && input) {
             let _prefix = _getPrefixFromInput(input);
             if (!_isPrefixValid(_prefix)) {
-                return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src=${img}/>`;
-                /* return pendingGifPromise.then(function(img) {
-                });*/
+                return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.</span><br><img class='git-image' src='${panic}'/>`;
             } else {
                 /** no keyword used after prefix */
                 input = input.split(" ");
@@ -217,10 +233,8 @@ function Terminal(element, options) {
             }
         }
         if (!result) {
-            // `\"${ input }\" is not recognized as an internal or external command, operable program or batch file.`
-            const img = 'https://www.memesmonkey.com/images/memesmonkey/ba/ba8153b6def991d0ac72155dc915dea7.jpeg'
             return `<span style='color:red'>\"${ input }\" is not recognized as an internal or external command, operable program or batch file.
-        </span><br><img alt="" class='git-image' src="${img}">`;
+        </span><br><img alt="" class='git-image' src="${panic}">`;
         } else {
             return result;
         }

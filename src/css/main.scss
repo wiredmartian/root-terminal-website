@@ -2,9 +2,9 @@
 * {
   margin: 0;
   padding: 0;
-  font-family:"Source Code Pro", "Courier New", Courier, monospace;
+  font-family:'Press Start 2P', cursive;;
   line-height: 32px;
-  font-size: 16px;
+  font-size: 10px;
 }
 html {
   height: 100vh;
@@ -94,6 +94,9 @@ a {
 @media (max-width: 768px) {
   .git-image {
     width: 60%;
+  }
+  #terminal-container {
+    width: 98%;
   }
 }
 @media (max-width: 425px) {
